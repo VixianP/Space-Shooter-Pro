@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     private float CanFire = -1;
     [SerializeField]
     private float FireRate = 0.5f;
+    [SerializeField]
+    private int PlayerHealth = 3;
 
     void Update()
     {
@@ -33,7 +35,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Boundaries()
+     void Boundaries()
     {
     
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f,0), 0);
@@ -44,6 +46,14 @@ public class Player : MonoBehaviour
         } else if (transform.position.x < -11)
         {
             transform.position = new Vector3(11, transform.position.y, 0);
+        }
+    }
+   public void Damage(int dmg)
+    {
+        PlayerHealth-=dmg;
+        if(PlayerHealth < 1)
+        {
+            Destroy(gameObject);
         }
     }
 }
