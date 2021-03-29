@@ -5,13 +5,14 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 5;
+    private float speed;
     [SerializeField]
      private int EnemyDamage = 1;
     
     // Start is called before the first frame update
     void Start()
     {
+        speed = Random.Range(2, 9);
         transform.position = new Vector3(Random.Range(-8.30f, 8.30f), 9, 0);
     }
 
@@ -23,16 +24,16 @@ public class Enemy : MonoBehaviour
     }
     void Emovement()
     {
-        transform.Translate(Vector3.down * speed * Time.deltaTime);
+        transform.Translate(Vector3.up * speed * Time.deltaTime);
     }
     void Eboundaries()
     {
         if(transform.position.y < -5.8)
         {
-            transform.position = new Vector3(Random.Range(-8.30f, 8.30f), 9, 0);
+            transform.position = new Vector3(Random.Range(-7.30f, 7.30f), 9, 0);
         }
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Laser")
         {

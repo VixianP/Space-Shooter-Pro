@@ -9,15 +9,35 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject LaserPrefab;
     [SerializeField]
+    private GameObject TripleShot;
+    [SerializeField]
     private float BulletOffSet;
 
     [SerializeField]
     private float CanFire = -1;
     [SerializeField]
+    private float TriplerShotTime = -1;
+    [SerializeField]
     private float FireRate = 0.5f;
     [SerializeField]
     private int PlayerHealth = 3;
 
+    SpawnManager spawnManager;
+
+    [SerializeField]
+    private bool IsTripleShotActive;
+
+    void Start()
+    {
+        GameObject FindSpawnManager = GameObject.Find("Spawn Manager");
+        if(FindSpawnManager != null)
+        {
+            spawnManager = FindSpawnManager.GetComponent<SpawnManager>();
+        } else
+        {
+            Debug.LogError("Spawn Manager null reference");
+        }
+    }
     void Update()
     {
         Fire();
@@ -28,13 +48,22 @@ public class Player : MonoBehaviour
     }
     void Fire()
     {
-        if (Input.GetKeyDown(KeyCode.Space ) && Time.time >= CanFire)
+        if (Input.GetKey(KeyCode.Space ) && Time.time >= CanFire)
         {
             CanFire = Time.time + FireRate;
-            Instantiate(LaserPrefab, new Vector3(transform.position.x,transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
-        }
-    }
+            if(IsTripleShotActive == true && Time.time < TriplerShotTime)
+            {
+                Instantiate(TripleShot, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
+            } else
+            {
+                Instantiate(LaserPrefab, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
+            }
+            
 
+        }
+        
+    }
+    
      void Boundaries()
     {
     
@@ -53,7 +82,20 @@ public class Player : MonoBehaviour
         PlayerHealth-=dmg;
         if(PlayerHealth < 1)
         {
+            spawnManager.OnPlayerDeath();
             Destroy(gameObject);
+        }
+    }
+
+    public void TripleShotActive()
+    {
+        if(IsTripleShotActive == true)
+        {
+            TriplerShotTime += 5;
+        } else
+        {
+            IsTripleShotActive = true;
+            TriplerShotTime = Time.time + 5;
         }
     }
 }
