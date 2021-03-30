@@ -7,11 +7,19 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float Speed = 5;
     [SerializeField]
+    private float MaxSpeed = 20;
+
+    [SerializeField]
     private GameObject LaserPrefab;
     [SerializeField]
     private GameObject TripleShot;
     [SerializeField]
     private float BulletOffSet;
+
+    [SerializeField]
+    private float InvulnTime = 5;
+    [SerializeField]
+    private bool IsInvul;
 
     [SerializeField]
     private float CanFire = -1;
@@ -45,6 +53,7 @@ public class Player : MonoBehaviour
         float VerticalInput = Input.GetAxis("Vertical");
         Boundaries();
         transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0)* Speed * Time.deltaTime);
+        InvulnTimer();
     }
     void Fire()
     {
@@ -56,9 +65,9 @@ public class Player : MonoBehaviour
                 Instantiate(TripleShot, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
             } else
             {
+                IsTripleShotActive = false;
                 Instantiate(LaserPrefab, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
             }
-            
 
         }
         
@@ -80,7 +89,7 @@ public class Player : MonoBehaviour
    public void Damage(int dmg)
     {
         PlayerHealth-=dmg;
-        if(PlayerHealth < 1)
+        if(PlayerHealth < 1 && IsInvul == false)
         {
             spawnManager.OnPlayerDeath();
             Destroy(gameObject);
@@ -96,6 +105,29 @@ public class Player : MonoBehaviour
         {
             IsTripleShotActive = true;
             TriplerShotTime = Time.time + 5;
+        }
+    }
+    public void SpeedBoost()
+    {
+        if (Speed < MaxSpeed)
+        {
+            Speed += 1;
+        } else
+        {
+            Speed = MaxSpeed;
+            IsInvul = true;
+            InvulnTime = Time.time + InvulnTime;
+        }
+     
+    }
+    void InvulnTimer()
+    {
+        if(Time.time < InvulnTime)
+        {
+            IsInvul = true;
+        } else
+        {
+            IsInvul = false;
         }
     }
 }

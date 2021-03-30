@@ -488,7 +488,7 @@ PrefabInstance:
     - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
         type: 3}
       propertyPath: IsTripleShotActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4702271636571153714, guid: a052df4a0b71b3241b5676ee4ae0f979,
         type: 3}

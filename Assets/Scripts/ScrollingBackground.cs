@@ -13,9 +13,9 @@ public class ScrollingBackground : MonoBehaviour
     }
     void Bounds()
     {
-        if(transform.position.y < -9.30f)
+        if(transform.position.y < -9.15f)
         {
-            transform.position = new Vector3(0, 12.2f, 5);
+            transform.position = new Vector3(0, 12.38f, 5);
         }
     }
 }
