@@ -10,46 +10,64 @@ public class SpawnManager : MonoBehaviour
     private GameObject Enemy;
     [SerializeField]
     private GameObject EnemyContainer;
+ 
     [SerializeField]
-    private GameObject TripleShot;
-    [SerializeField]
-    private GameObject SpeedBoost;
-  
+    private GameObject[] PowerUp;
+    private int PowerUpSelection;
 
+    [SerializeField]
+    GameObject UIManagerGameObject;
+    [SerializeField]
+    GameObject SceneLoaderGameObject;
+  
     private bool IsPlayerDead = false;
 
+    UIManager UIM;
+    SceneLoader SL;
     
     private void Awake()
     {
+        SL = SceneLoaderGameObject.GetComponent<SceneLoader>();
+        UIM = UIManagerGameObject.GetComponent<UIManager>();
+        StartCoroutine(EnemyCoroutine(EnemySpawnTime));
+        StartCoroutine(PowerUpCoroutine());
+
+    }
+
+    private void Update()
+    {
+        GameOverInput();
+    }
+
+    IEnumerator PowerUpCoroutine()
+    {
         while (IsPlayerDead == false)
         {
-            StartCoroutine(EnemyCoroutine(EnemySpawnTime));
-            StartCoroutine(TripleShotCoroutine());
-            StartCoroutine(SpeedBoostCoroutine());
+            PowerUpSelection = Random.Range(0, PowerUp.Length);
+            GameObject NewPowerUp = Instantiate(PowerUp[PowerUpSelection], new Vector3(Random.Range(-7.20f, 7.20f), 8f, 0), Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(3, 8));
         }
     }
-
-    IEnumerator SpeedBoostCoroutine()
-    {
-
-            GameObject NewPowerUp = Instantiate(SpeedBoost, new Vector3(Random.Range(-8.20f, 8.20f), 8f, 0), Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(3, 8));
-    }
-    IEnumerator TripleShotCoroutine()
-    {
-
-            GameObject NewPowerUp = Instantiate(TripleShot, new Vector3(Random.Range(-8.20f, 8.20f), 8f, 0), Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(3,8));
-    }
+   
     IEnumerator EnemyCoroutine(float time)
     {
-      
-           GameObject NewEnemy = Instantiate(Enemy, new Vector3(Random.Range(-8.20f, 8.20f),8f,0), Quaternion.Euler(180,0,0));
+        while (IsPlayerDead == false)
+        {
+            GameObject NewEnemy = Instantiate(Enemy, new Vector3(Random.Range(-8.20f, 8.20f), 8f, 0), Quaternion.Euler(180, 0, 0));
             NewEnemy.transform.parent = EnemyContainer.transform;
             yield return new WaitForSeconds(time);
+        }
     }
     public void OnPlayerDeath()
     {
         IsPlayerDead = true;
+        UIM.GameOver();
+    }
+    public void GameOverInput()
+    {
+        if (IsPlayerDead == true)
+        {
+            SL.GameOverRestart();
+        }
     }
 }

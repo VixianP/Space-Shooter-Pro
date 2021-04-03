@@ -10,6 +10,11 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private int PowerUpID;
 
+
+    private void Start()
+    {
+        SpeedPowerUp();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -24,6 +29,13 @@ public class PowerUp : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void SpeedPowerUp()
+    {
+        if(PowerUpID == 1)
+        {
+            StartCoroutine(ExpireCoroutine());
+        }
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player")
@@ -35,15 +47,22 @@ public class PowerUp : MonoBehaviour
                     player.TripleShotActive();
                     break;
                 case 1:
-                    //speed (max to 20)
+                    player.SpeedBoost();
                     break;
                 case 2:
-                    //shield
+                    player.ShieldActive();
                     break;
         }
-
+            Destroy(gameObject);
         }
        
+    }
+    IEnumerator ExpireCoroutine()
+    {
+
+        yield return new WaitForSeconds(3);
+        Destroy(gameObject);
+
     }
 
 }

@@ -14,12 +14,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject TripleShot;
     [SerializeField]
+    private GameObject Shield;
+    [SerializeField]
     private float BulletOffSet;
 
     [SerializeField]
-    private float InvulnTime = 5;
+    private float InvulnTime = -1;
     [SerializeField]
-    private bool IsInvul;
+    private bool IsInvul = false;
 
     [SerializeField]
     private float CanFire = -1;
@@ -31,9 +33,15 @@ public class Player : MonoBehaviour
     private int PlayerHealth = 3;
 
     SpawnManager spawnManager;
+    UIManager PUI;
+   
 
     [SerializeField]
     private bool IsTripleShotActive;
+    private bool IsShieldActive;
+
+    [SerializeField]
+    private int Score;
 
     void Start()
     {
@@ -45,6 +53,16 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Spawn Manager null reference");
         }
+        GameObject FindPlayerUI = GameObject.Find("UIManager");
+        if (FindPlayerUI != null)
+        {
+            PUI = FindPlayerUI.GetComponent<UIManager>();
+        }
+        else
+        {
+            Debug.LogError("PLAYER:UIManager is null");
+        }
+        PUI.UpdateLives(PlayerHealth);
     }
     void Update()
     {
@@ -88,7 +106,17 @@ public class Player : MonoBehaviour
     }
    public void Damage(int dmg)
     {
-        PlayerHealth-=dmg;
+        if(IsShieldActive == true)
+        {
+            Shield.SetActive(false);
+            IsShieldActive = false;
+            return;
+        }
+        if(IsInvul == false)
+        {
+            PlayerHealth -= dmg;
+            PUI.UpdateLives(PlayerHealth);
+        }
         if(PlayerHealth < 1 && IsInvul == false)
         {
             spawnManager.OnPlayerDeath();
@@ -116,7 +144,7 @@ public class Player : MonoBehaviour
         {
             Speed = MaxSpeed;
             IsInvul = true;
-            InvulnTime = Time.time + InvulnTime;
+            InvulnTime = Time.time + 5;
         }
      
     }
@@ -129,5 +157,15 @@ public class Player : MonoBehaviour
         {
             IsInvul = false;
         }
+    }
+    public void ShieldActive()
+    {
+        IsShieldActive = true;
+        Shield.SetActive(true);
+    }
+    public void AddPoints(int PointsToAdd)
+    {
+        Score += PointsToAdd;
+        PUI.UpdateScore(Score);
     }
 }
