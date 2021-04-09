@@ -29,9 +29,6 @@ public class SpawnManager : MonoBehaviour
     {
         SL = SceneLoaderGameObject.GetComponent<SceneLoader>();
         UIM = UIManagerGameObject.GetComponent<UIManager>();
-        StartCoroutine(EnemyCoroutine(EnemySpawnTime));
-        StartCoroutine(PowerUpCoroutine());
-
     }
 
     private void Update()
@@ -41,6 +38,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator PowerUpCoroutine()
     {
+        yield return new WaitForSeconds(1);
         while (IsPlayerDead == false)
         {
             PowerUpSelection = Random.Range(0, PowerUp.Length);
@@ -48,9 +46,16 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(3, 8));
         }
     }
+
+    public void StartSpawning()
+    {
+        StartCoroutine(EnemyCoroutine(EnemySpawnTime));
+        StartCoroutine(PowerUpCoroutine());
+    }
    
     IEnumerator EnemyCoroutine(float time)
     {
+        yield return new WaitForSeconds(1);
         while (IsPlayerDead == false)
         {
             GameObject NewEnemy = Instantiate(Enemy, new Vector3(Random.Range(-8.20f, 8.20f), 8f, 0), Quaternion.Euler(180, 0, 0));

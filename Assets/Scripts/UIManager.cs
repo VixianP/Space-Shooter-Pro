@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     GameObject GameOverText;
     [SerializeField]
     GameObject RestartText;
+    [SerializeField]
+    GameObject QuitText;
 
     private void Start()
     {
@@ -35,5 +37,6 @@ public class UIManager : MonoBehaviour
     {
         GameOverText.SetActive(true);
         RestartText.SetActive(true);
+        QuitText.SetActive(true);
     }
 }

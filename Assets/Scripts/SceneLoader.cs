@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     [SerializeField]
-    GameObject SpawnManagerGameObject;
-    [SerializeField]
     private int CurrentScene;
  
     public void GameOverRestart()
@@ -16,6 +14,17 @@ public class SceneLoader : MonoBehaviour
         {
             SceneManager.LoadScene(CurrentScene);
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SceneManager.LoadScene(1);
+        }
     }
-    
+    public void SceneToLoad(int SceneNumber)
+    {
+        SceneManager.LoadScene(SceneNumber);
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

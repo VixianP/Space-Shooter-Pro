@@ -11,11 +11,15 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int PointValue = 5;
 
+    private bool IsDead;
+
     Player player;
+    Animator EnemyAnimator;
+    Collider2D EnemyCollider;
     // Start is called before the first frame update
     void Start()
     {
-        if(player == null)
+        if (player == null)
         {
             GameObject FindPlayer = GameObject.Find("Player");
             if(FindPlayer != null)
@@ -26,6 +30,8 @@ public class Enemy : MonoBehaviour
                 Debug.LogError("Enemy:Player is null");
             }
         }
+        EnemyAnimator = GetComponent<Animator>();
+        EnemyCollider = GetComponent<Collider2D>();
         speed = Random.Range(2, 9);
         transform.position = new Vector3(Random.Range(-8.30f, 8.30f), 9, 0);
     }
@@ -52,14 +58,22 @@ public class Enemy : MonoBehaviour
         
         if(other.tag == "Laser")
         {
+            EnemyCollider.enabled = false;
+            EnemyAnimator.SetTrigger("ED");
             player.AddPoints(PointValue);
+            speed = 1;
             Destroy(other.gameObject);
-            Destroy(gameObject);
+            Destroy(gameObject, 0.6f);
+
         }
         if(other.tag == "Player")
         {
+                EnemyCollider.enabled = false;
+                speed = 1;
+                EnemyAnimator.SetTrigger("ED");
                 player.Damage(EnemyDamage);
-                Destroy(gameObject);
+                IsDead = true;
+                Destroy(gameObject,0.6f);
         }
     }
 }

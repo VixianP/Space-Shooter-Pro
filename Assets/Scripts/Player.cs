@@ -34,7 +34,13 @@ public class Player : MonoBehaviour
 
     SpawnManager spawnManager;
     UIManager PUI;
-   
+
+    [SerializeField]
+    GameObject RightEngine;
+    [SerializeField]
+    GameObject LeftEngine;
+    [SerializeField]
+    GameObject PlayerExplode;
 
     [SerializeField]
     private bool IsTripleShotActive;
@@ -94,7 +100,7 @@ public class Player : MonoBehaviour
      void Boundaries()
     {
     
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f,0), 0);
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f,5), 0);
 
         if (transform.position.x > 11)
         {
@@ -106,7 +112,7 @@ public class Player : MonoBehaviour
     }
    public void Damage(int dmg)
     {
-        if(IsShieldActive == true)
+        if (IsShieldActive == true)
         {
             Shield.SetActive(false);
             IsShieldActive = false;
@@ -116,6 +122,18 @@ public class Player : MonoBehaviour
         {
             PlayerHealth -= dmg;
             PUI.UpdateLives(PlayerHealth);
+            switch (PlayerHealth)
+            {
+                case 2:
+                    LeftEngine.SetActive(true);
+                    break;
+                case 1:
+                    RightEngine.SetActive(true);
+                    break;
+                case 0:
+                    Instantiate(PlayerExplode, transform.position, Quaternion.identity);
+                    break;
+            }
         }
         if(PlayerHealth < 1 && IsInvul == false)
         {
