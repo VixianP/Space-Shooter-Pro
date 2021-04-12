@@ -18,9 +18,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject QuitText;
 
+    [SerializeField]
+    Canvas PlayerUICanvas;
+    [SerializeField]
+    Canvas PauseMenuUI;
+
     private void Start()
     {
-        Score.text = "Score :" + 0;
+        Score.text = "Score : " + 0;
     }
 
     public void UpdateScore(int Points)
@@ -44,5 +49,17 @@ public class UIManager : MonoBehaviour
         GameOverText.SetActive(true);
         RestartText.SetActive(true);
         QuitText.SetActive(true);
+    }
+    public void PauseMenu()
+    {
+        PauseMenuUI.gameObject.SetActive(true);
+        PlayerUICanvas.enabled = false;
+        Time.timeScale = 0;
+    }
+    public void UnPauseMenu()
+    {
+        PlayerUICanvas.enabled = true;
+        PauseMenuUI.gameObject.SetActive(false);
+        Time.timeScale = 1;
     }
 }

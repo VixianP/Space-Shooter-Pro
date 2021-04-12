@@ -55,6 +55,8 @@ public class Player : MonoBehaviour
     AudioClip[] PlayerFX;
     AudioSource PlayerAudio;
 
+    private bool IsPaused = false;
+
     void Start()
     {
         GameObject FindSpawnManager = GameObject.Find("Spawn Manager");
@@ -80,12 +82,16 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-        Fire();
-        float HorizontalInput = Input.GetAxis("Horizontal");
-        float VerticalInput = Input.GetAxis("Vertical");
-        Boundaries();
-        transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0)* Speed * Time.deltaTime);
-        InvulnTimer();
+        if (IsPaused == false)
+        {
+            Fire();
+            float HorizontalInput = Input.GetAxis("Horizontal");
+            float VerticalInput = Input.GetAxis("Vertical");
+            Boundaries();
+            transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0) * Speed * Time.deltaTime);
+            InvulnTimer();
+        }
+        PauseGame();
     }
     void Fire()
     {
@@ -196,9 +202,19 @@ public class Player : MonoBehaviour
         Score += PointsToAdd;
         PUI.UpdateScore(Score);
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void PauseGame()
     {
-   
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+            IsPaused = !IsPaused;
+            if(IsPaused == true)
+                {
+                PUI.PauseMenu();
+                }
+            }
+            if (Time.timeScale == 1)
+                {
+            IsPaused = false;
+                }
     }
 }

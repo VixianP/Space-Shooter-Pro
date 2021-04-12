@@ -22,7 +22,7 @@ public class Asteroid : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(0, 0, RotSpeed);
+        transform.Rotate(0, 0, RotSpeed * Time.deltaTime);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
