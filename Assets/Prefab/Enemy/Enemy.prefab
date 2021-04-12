@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4497433364351202975}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,8 +114,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  EnemyDamage: 1
+  EnemyCollisionDamage: 1
   PointValue: 5
+  EnemyFireRate: 0.3
+  TrailRate: 0.2
+  EnemyHealth: 0
+  LaserSpeed: -8
+  LaserDamage: 1
+  EnemyAudioClips:
+  - {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  - {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
+  Elaser: {fileID: 2436435993528789681, guid: 176d4df62f5b3ae42b8adf3097b8e52d, type: 3}
 --- !u!50 &2069131094294737796
 Rigidbody2D:
   serializedVersion: 4

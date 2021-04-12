@@ -31,7 +31,13 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateLives(int CurrentLives)
     {
+        if(CurrentLives > 0) 
+        { 
         LivesImage.sprite = LivesSprite[CurrentLives];
+        } else
+        {
+            LivesImage.sprite = LivesSprite[0];
+        }
     }
     public void GameOver()
     {

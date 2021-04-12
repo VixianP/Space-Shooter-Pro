@@ -24,6 +24,8 @@ public class SpawnManager : MonoBehaviour
 
     UIManager UIM;
     SceneLoader SL;
+
+    //enemy count
     
     private void Awake()
     {
@@ -75,4 +77,6 @@ public class SpawnManager : MonoBehaviour
             SL.GameOverRestart();
         }
     }
+
+    //public method to update method and call enemy coroutine
 }

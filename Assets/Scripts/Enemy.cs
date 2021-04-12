@@ -7,15 +7,33 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float speed;
     [SerializeField]
-     private int EnemyDamage = 1;
+     private int EnemyCollisionDamage = 1;
     [SerializeField]
     private int PointValue = 5;
-
-    private bool IsDead;
+    [SerializeField]
+    float EnemyFireRate = 1;
+    [SerializeField]
+    float TrailRate;
+    [SerializeField]
+    private int EnemyHealth;
+    [SerializeField]
+    private int LaserSpeed;
+    [SerializeField]
+    private int LaserDamage;
 
     Player player;
+    LaserBehavior ElaserSpecs;
+
     Animator EnemyAnimator;
     Collider2D EnemyCollider;
+
+    [SerializeField]
+    AudioClip[] EnemyAudioClips;
+
+    [SerializeField]
+    private GameObject Elaser;
+
+    private bool IsDead;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +50,8 @@ public class Enemy : MonoBehaviour
         }
         EnemyAnimator = GetComponent<Animator>();
         EnemyCollider = GetComponent<Collider2D>();
-        speed = Random.Range(2, 9);
+        ElaserSpecs = Elaser.GetComponent<LaserBehavior>();
+        speed = Random.Range(1, 5);
         transform.position = new Vector3(Random.Range(-8.30f, 8.30f), 9, 0);
     }
 
@@ -41,6 +60,7 @@ public class Enemy : MonoBehaviour
     {
         Emovement();
         Eboundaries();
+        EnemyFire();
     }
     void Emovement()
     {
@@ -55,25 +75,39 @@ public class Enemy : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
-        if(other.tag == "Laser")
-        {
-            EnemyCollider.enabled = false;
-            EnemyAnimator.SetTrigger("ED");
-            player.AddPoints(PointValue);
-            speed = 1;
-            Destroy(other.gameObject);
-            Destroy(gameObject, 0.6f);
-
-        }
         if(other.tag == "Player")
         {
                 EnemyCollider.enabled = false;
                 speed = 1;
                 EnemyAnimator.SetTrigger("ED");
-                player.Damage(EnemyDamage);
-                IsDead = true;
-                Destroy(gameObject,0.6f);
+                AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
+                Destroy(gameObject);
+        }
+    }
+    void EnemyFire()
+    {
+        if (IsDead == false && transform.position.y > 0)
+        {
+                if (Time.time > EnemyFireRate)
+                {
+
+                Instantiate(Elaser, transform.position, Quaternion.identity);
+                EnemyFireRate = Time.time + Random.Range(0.3f, 2);
+                }
+        }
+    }
+    public void EDamage(int Dmg)
+    {
+        EnemyHealth -= Dmg;
+        if (EnemyHealth < 1)
+        {
+            EnemyCollider.enabled = false;
+            EnemyAnimator.SetTrigger("ED");
+            player.AddPoints(PointValue);
+            speed = 1;
+            AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
+            IsDead = true;
+            Destroy(gameObject);
         }
     }
 }

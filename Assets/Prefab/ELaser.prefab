@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2747728255292702028
+--- !u!1 &2436435993528789681
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1349562060740705069}
-  - component: {fileID: 7629525247371933863}
-  - component: {fileID: 6402674052532634693}
-  - component: {fileID: 2626600656223429640}
-  - component: {fileID: 6386698932548821811}
+  - component: {fileID: 1537005524683271376}
+  - component: {fileID: 7930721436753096538}
+  - component: {fileID: 6860336599378793400}
+  - component: {fileID: 2566381685549921269}
+  - component: {fileID: 3383601052963989419}
   m_Layer: 0
-  m_Name: Laser
-  m_TagString: Laser
+  m_Name: ELaser
+  m_TagString: ELaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1349562060740705069
+--- !u!4 &1537005524683271376
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2747728255292702028}
+  m_GameObject: {fileID: 2436435993528789681}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: -0.79, z: 0}
-  m_LocalScale: {x: 0.29925025, y: 0.26163948, z: 1.1711566}
+  m_LocalPosition: {x: -0.02437, y: -0.51569, z: 0}
+  m_LocalScale: {x: 0.8190957, y: 0.8124161, z: 2.7751105}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7629525247371933863
+--- !u!212 &7930721436753096538
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2747728255292702028}
+  m_GameObject: {fileID: 2436435993528789681}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: -1858344029
   m_SortingLayer: -4
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: b030d335857201646be69703e678d6e5, type: 3}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,49 +84,49 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6402674052532634693
+--- !u!114 &6860336599378793400
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2747728255292702028}
+  m_GameObject: {fileID: 2436435993528789681}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df164174ffb745b4f9388b3671d6bb88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 35
-  AttackPower: 3
-  IsPlayer: 1
---- !u!70 &2626600656223429640
+  speed: -6
+  AttackPower: 1
+  IsPlayer: 0
+--- !u!70 &2566381685549921269
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2747728255292702028}
+  m_GameObject: {fileID: 2436435993528789681}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.030190447, y: 0}
-  m_Size: {x: 0.57733274, y: 2.9999998}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.2, y: 0.2}
   m_Direction: 0
---- !u!96 &6386698932548821811
+--- !u!96 &3383601052963989419
 TrailRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2747728255292702028}
+  m_GameObject: {fileID: 2436435993528789681}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -134,7 +134,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c76f26ebff51544fb526eec6b47e6f0, type: 2}
+  - {fileID: 2100000, guid: 2af8c3e693084d64e8a2bc69efb6edd6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -155,10 +155,10 @@ TrailRenderer:
   m_SortingLayerID: -1858344029
   m_SortingLayer: -4
   m_SortingOrder: 0
-  m_Time: 0.25
+  m_Time: 0.5
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.2
+    widthMultiplier: 0.1
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -172,7 +172,7 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6059568
+        time: 0.5904762
         value: 0
         inSlope: 0
         outSlope: 0

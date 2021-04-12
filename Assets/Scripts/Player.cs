@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     private float FireRate = 0.5f;
     [SerializeField]
     private int PlayerHealth = 3;
+   
+        
 
     SpawnManager spawnManager;
     UIManager PUI;
@@ -48,6 +50,10 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int Score;
+
+    [SerializeField]
+    AudioClip[] PlayerFX;
+    AudioSource PlayerAudio;
 
     void Start()
     {
@@ -69,6 +75,8 @@ public class Player : MonoBehaviour
             Debug.LogError("PLAYER:UIManager is null");
         }
         PUI.UpdateLives(PlayerHealth);
+        PlayerAudio = GetComponent<AudioSource>();
+        PlayerAudio.clip = PlayerFX[0];
     }
     void Update()
     {
@@ -87,10 +95,14 @@ public class Player : MonoBehaviour
             if(IsTripleShotActive == true && Time.time < TriplerShotTime)
             {
                 Instantiate(TripleShot, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
+                PlayerAudio.Play();
+                PlayerAudio.volume = 6;
             } else
             {
                 IsTripleShotActive = false;
                 Instantiate(LaserPrefab, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
+                PlayerAudio.Play();
+                PlayerAudio.volume = 4;
             }
 
         }
@@ -130,15 +142,14 @@ public class Player : MonoBehaviour
                 case 1:
                     RightEngine.SetActive(true);
                     break;
-                case 0:
-                    Instantiate(PlayerExplode, transform.position, Quaternion.identity);
-                    break;
             }
         }
         if(PlayerHealth < 1 && IsInvul == false)
         {
+            Destroy(gameObject.GetComponent<Collider2D>()); //show atomic bomb
             spawnManager.OnPlayerDeath();
-            Destroy(gameObject);
+            Destroy(gameObject,0.2f);
+            Instantiate(PlayerExplode, transform.position, Quaternion.identity);
         }
     }
 
@@ -164,7 +175,6 @@ public class Player : MonoBehaviour
             IsInvul = true;
             InvulnTime = Time.time + 5;
         }
-     
     }
     void InvulnTimer()
     {
@@ -185,5 +195,10 @@ public class Player : MonoBehaviour
     {
         Score += PointsToAdd;
         PUI.UpdateScore(Score);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+   
     }
 }

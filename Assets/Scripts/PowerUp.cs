@@ -10,17 +10,13 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private int PowerUpID;
 
-
-    private void Start()
-    {
-        SpeedPowerUp();
-    }
+    [SerializeField]
+    private AudioClip PowerUpAudio;
     // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.down * speed * Time.deltaTime);
         Boundaries();
-        
     }
     void Boundaries()
     {
@@ -29,13 +25,7 @@ public class PowerUp : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    void SpeedPowerUp()
-    {
-        if(PowerUpID == 1)
-        {
-            StartCoroutine(ExpireCoroutine());
-        }
-    }
+  
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player")
@@ -53,16 +43,11 @@ public class PowerUp : MonoBehaviour
                     player.ShieldActive();
                     break;
         }
+            AudioSource.PlayClipAtPoint(PowerUpAudio, transform.position);
             Destroy(gameObject);
         }
        
     }
-    IEnumerator ExpireCoroutine()
-    {
 
-        yield return new WaitForSeconds(3);
-        Destroy(gameObject);
-
-    }
 
 }
