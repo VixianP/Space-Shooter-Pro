@@ -5,9 +5,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float Speed = 5;
+    private float BaseSpeed = 5;
     [SerializeField]
     private float MaxSpeed = 20;
+    [SerializeField]
+    private float ThrusterSpeed;
+    private float speed;
 
     [SerializeField]
     private GameObject LaserPrefab;
@@ -32,8 +35,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int PlayerHealth = 3;
    
-        
-
+    
     SpawnManager spawnManager;
     UIManager PUI;
 
@@ -56,9 +58,15 @@ public class Player : MonoBehaviour
     AudioSource PlayerAudio;
 
     private bool IsPaused = false;
+    private bool IsDodging;
+
+    [SerializeField]
+    Animator Thruster;
+
 
     void Start()
     {
+        speed = BaseSpeed;
         GameObject FindSpawnManager = GameObject.Find("Spawn Manager");
         if(FindSpawnManager != null)
         {
@@ -85,11 +93,8 @@ public class Player : MonoBehaviour
         if (IsPaused == false)
         {
             Fire();
-            float HorizontalInput = Input.GetAxis("Horizontal");
-            float VerticalInput = Input.GetAxis("Vertical");
             Boundaries();
-            transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0) * Speed * Time.deltaTime);
-            InvulnTimer();
+            Movement();
         }
         PauseGame();
     }
@@ -113,6 +118,26 @@ public class Player : MonoBehaviour
 
         }
         
+    }
+    void Movement()
+    {
+        float HorizontalInput = Input.GetAxis("Horizontal");
+        float VerticalInput = Input.GetAxis("Vertical");
+        
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            BaseSpeed = speed * ThrusterSpeed;
+            Thruster.SetInteger("ThrusterON", 1);
+        } else
+        {
+            BaseSpeed = speed;
+            Thruster.SetInteger("ThrusterON", -1);
+        }
+ 
+        if (IsDodging == false)
+        {
+            transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0) * BaseSpeed * Time.deltaTime);
+        }
     }
     
      void Boundaries()
@@ -172,24 +197,43 @@ public class Player : MonoBehaviour
     }
     public void SpeedBoost()
     {
-        if (Speed < MaxSpeed)
+        if (BaseSpeed < MaxSpeed)
         {
-            Speed += 1;
+            BaseSpeed += 1;
+            speed = BaseSpeed;
         } else
         {
-            Speed = MaxSpeed;
+            BaseSpeed = MaxSpeed;
             IsInvul = true;
-            InvulnTime = Time.time + 5;
+            InvulnTimer();
         }
     }
     void InvulnTimer()
     {
-        if(Time.time < InvulnTime)
+        if (IsDodging == false)
         {
-            IsInvul = true;
-        } else
+            if (Time.time < InvulnTime)
+            {
+                InvulnTime = Time.time + 5;
+                IsInvul = true;
+            }
+            else
+            {
+                IsInvul = false;
+            }
+        }
+        if(IsDodging == true)
         {
-            IsInvul = false;
+            if (Time.time < InvulnTime)
+            {
+                InvulnTime = Time.time + 0.9f;
+                IsInvul = true;
+            }
+            else
+            {
+                IsInvul = false;
+                IsDodging = false;
+            }
         }
     }
     public void ShieldActive()

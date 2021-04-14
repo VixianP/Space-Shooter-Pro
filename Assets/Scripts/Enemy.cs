@@ -80,6 +80,7 @@ public class Enemy : MonoBehaviour
                 EnemyCollider.enabled = false;
                 speed = 1;
                 EnemyAnimator.SetTrigger("ED");
+                player.Damage(EnemyCollisionDamage);
                 AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
                 Destroy(gameObject);
         }
