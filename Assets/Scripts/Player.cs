@@ -4,16 +4,30 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField] 
     private float BaseSpeed = 5;
     [SerializeField]
     private float MaxSpeed = 20;
     [SerializeField]
     private float ThrusterSpeed;
     private float speed;
+    [SerializeField][Range(0,1)]
+    private float ThrusterSpeedAnim;
+    private float BoostTime;
 
     [SerializeField]
     private GameObject LaserPrefab;
+
+    [SerializeField]
+    GameObject[] Projectiles;
+    [SerializeField]
+    float[] SkillCD;
+    [SerializeField]
+    int Ammo1;
+    [SerializeField]
+    int Ammoref1;
+
+
     [SerializeField]
     private GameObject TripleShot;
     [SerializeField]
@@ -28,16 +42,20 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private float CanFire = -1;
+    private bool CanBoost = true;
+
     [SerializeField]
     private float TriplerShotTime = -1;
     [SerializeField]
     private float FireRate = 0.5f;
     [SerializeField]
     private int PlayerHealth = 3;
+    private int ShieldHealth = 0;
    
     
     SpawnManager spawnManager;
     UIManager PUI;
+    Camera Main;
 
     [SerializeField]
     GameObject RightEngine;
@@ -48,7 +66,6 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private bool IsTripleShotActive;
-    private bool IsShieldActive;
 
     [SerializeField]
     private int Score;
@@ -63,10 +80,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     Animator Thruster;
 
-
     void Start()
     {
         speed = BaseSpeed;
+        ThrusterSpeed = speed * ThrusterSpeed;
         GameObject FindSpawnManager = GameObject.Find("Spawn Manager");
         if(FindSpawnManager != null)
         {
@@ -84,15 +101,20 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("PLAYER:UIManager is null");
         }
+        Main = Camera.main;
         PUI.UpdateLives(PlayerHealth);
         PlayerAudio = GetComponent<AudioSource>();
         PlayerAudio.clip = PlayerFX[0];
+
+        Ammoref1 = Ammo1;
+        
     }
     void Update()
     {
         if (IsPaused == false)
         {
             Fire();
+            Abillites();
             Boundaries();
             Movement();
         }
@@ -100,7 +122,7 @@ public class Player : MonoBehaviour
     }
     void Fire()
     {
-        if (Input.GetKey(KeyCode.Space ) && Time.time >= CanFire)
+        if (Input.GetKey(KeyCode.A ) && Time.time >= CanFire)
         {
             CanFire = Time.time + FireRate;
             if(IsTripleShotActive == true && Time.time < TriplerShotTime)
@@ -115,23 +137,29 @@ public class Player : MonoBehaviour
                 PlayerAudio.Play();
                 PlayerAudio.volume = 4;
             }
-
         }
-        
     }
+    
     void Movement()
     {
         float HorizontalInput = Input.GetAxis("Horizontal");
         float VerticalInput = Input.GetAxis("Vertical");
         
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && CanBoost == true)
         {
-            BaseSpeed = speed * ThrusterSpeed;
-            Thruster.SetInteger("ThrusterON", 1);
+            StartCoroutine(Boost(0.2f));
+            if (BaseSpeed >= ThrusterSpeed)
+            {
+                BaseSpeed = ThrusterSpeed;
+                CanBoost = false;
+            }
         } else
         {
-            BaseSpeed = speed;
-            Thruster.SetInteger("ThrusterON", -1);
+            StartCoroutine(Deccerlate(-0.2f));
+            if (BaseSpeed <= speed)
+            {
+                BaseSpeed = speed;
+            }
         }
  
         if (IsDodging == false)
@@ -155,11 +183,14 @@ public class Player : MonoBehaviour
     }
    public void Damage(int dmg)
     {
-        if (IsShieldActive == true)
+        if (ShieldHealth > 1)
+        {
+            Shield.transform.localScale = Shield.transform.localScale * .8f;
+            ShieldHealth--;
+            return;
+        } else
         {
             Shield.SetActive(false);
-            IsShieldActive = false;
-            return;
         }
         if(IsInvul == false)
         {
@@ -169,14 +200,17 @@ public class Player : MonoBehaviour
             {
                 case 2:
                     LeftEngine.SetActive(true);
+                    Main.GetComponent<Animator>().SetTrigger("Shake");
                     break;
                 case 1:
+                    Main.GetComponent<Animator>().SetTrigger("Shake");
                     RightEngine.SetActive(true);
                     break;
             }
         }
         if(PlayerHealth < 1 && IsInvul == false)
         {
+            Main.GetComponent<Animator>().SetTrigger("Shake");
             Destroy(gameObject.GetComponent<Collider2D>()); //show atomic bomb
             spawnManager.OnPlayerDeath();
             Destroy(gameObject,0.2f);
@@ -238,7 +272,8 @@ public class Player : MonoBehaviour
     }
     public void ShieldActive()
     {
-        IsShieldActive = true;
+        ShieldHealth = 3;
+        Shield.transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
         Shield.SetActive(true);
     }
     public void AddPoints(int PointsToAdd)
@@ -248,17 +283,125 @@ public class Player : MonoBehaviour
     }
     private void PauseGame()
     {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             IsPaused = !IsPaused;
-            if(IsPaused == true)
-                {
+            if (IsPaused == true)
+            {
                 PUI.PauseMenu();
+            }
+        }
+        if (Time.timeScale == 1)
+        {
+            IsPaused = false;
+        }
+    }
+    private void Abillites()
+    {
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if(Time.time >= SkillCD[0])
+            {
+                if (Ammo1 > 0)
+                {
+                    Ammo1--;
+                    SkillCD[0] = Time.time + 1;
+                    StartCoroutine(BurstfireTimer());
+                    PUI.UpdateAmmo(Ammo1);
                 }
             }
-            if (Time.timeScale == 1)
-                {
-            IsPaused = false;
-                }
+        }
+        /*
+        if (Input.GetKey(KeyCode.D))
+        {
+            if (Time.time > SkillCD[1])
+            {
+
+            }
+        }
+        if (Input.GetKey(KeyCode.F))
+        {
+            if (Time.time > SkillCD[2])
+            {
+
+            }
+        }
+        if (Input.GetKey(KeyCode.G))
+        {
+            if (Time.time > SkillCD[3])
+            {
+
+            }
+        }
+        */
     }
+    IEnumerator BurstfireTimer()
+    {
+        for (int i = 0; i < 7;)
+        {
+            Instantiate(Projectiles[0], transform.position, Quaternion.identity);
+            PlayerAudio.Play();
+            PlayerAudio.volume = 4;
+            yield return new WaitForSeconds(0.1f);
+            i++;
+        }
+
+    }
+    public void Reload()
+    {
+        Ammo1 = Ammoref1;
+        PUI.UpdateAmmo(Ammo1);
+    }
+    public void Heal()
+    {
+        PlayerHealth++;
+        if(PlayerHealth > 3)
+        {
+            PlayerHealth = 3;
+        }
+        switch (PlayerHealth)
+        {
+            case 2:
+                LeftEngine.SetActive(false);
+                PUI.UpdateLives(PlayerHealth);
+                break;
+            case 1:
+                RightEngine.SetActive(false);
+                PUI.UpdateLives(PlayerHealth);
+                break;
+        }
+    }
+    IEnumerator Boost(float boostnum)
+    {
+        if(BaseSpeed < ThrusterSpeed)
+        {
+            yield return new WaitForSeconds(0.1f);
+            BaseSpeed += boostnum;
+            PUI.UpdateBoostUI(0.1f);
+            Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim+= 0.1f);
+            if(ThrusterSpeedAnim < 0)
+            {
+                ThrusterSpeedAnim = 0;
+            }
+        }
+    }
+    IEnumerator Deccerlate(float boostnum)
+    {
+        if(BaseSpeed > speed)
+        {
+            yield return new WaitForSeconds(0.5f);
+            BaseSpeed += boostnum;
+            PUI.UpdateBoostUI(-0.1f);
+            Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim -= 0.1f);
+            if (ThrusterSpeedAnim > 1)
+            {
+                ThrusterSpeedAnim = 1;
+            }
+        } else
+        {
+            CanBoost = true;
+        }
+    }
+ 
 }

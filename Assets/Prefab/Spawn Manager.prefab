@@ -43,11 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619cf1e5498add544be8aa02fcfb816d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemySpawnTime: 0.4
+  EnemySpawnTime: 1
   Enemy: {fileID: 6117990120917974156, guid: f7e5769417fa3244d8af2e320c05622d, type: 3}
   EnemyContainer: {fileID: 0}
   PowerUp:
   - {fileID: 6408486037773384265, guid: e6dacdd1cd35d904d8e3b67b51e8fe4c, type: 3}
   - {fileID: 6807274005997359632, guid: a5763aff9c7cc094e9e358252ba6b091, type: 3}
   - {fileID: 3880390592567188522, guid: 748a9003f13ff904391783da81289e5b, type: 3}
+  - {fileID: 5972552575859988985, guid: caba8866387c2094e94ed48d139c6088, type: 3}
+  - {fileID: 7163675337575464211, guid: 26390cd4ed1234a429be2f3e6e11a9bd, type: 3}
   UIManagerGameObject: {fileID: 0}
+  SceneLoaderGameObject: {fileID: 0}

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1537005524683271376}
   - component: {fileID: 7930721436753096538}
-  - component: {fileID: 6860336599378793400}
   - component: {fileID: 2566381685549921269}
   - component: {fileID: 3383601052963989419}
+  - component: {fileID: 4092982800230272339}
   m_Layer: 0
   m_Name: ELaser
   m_TagString: ELaser
@@ -84,21 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6860336599378793400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2436435993528789681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df164174ffb745b4f9388b3671d6bb88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: -6
-  AttackPower: 1
-  IsPlayer: 0
 --- !u!70 &2566381685549921269
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -152,8 +137,8 @@ TrailRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1858344029
-  m_SortingLayer: -4
+  m_SortingLayerID: -1906347045
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_Time: 0.5
   m_Parameters:
@@ -221,3 +206,18 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &4092982800230272339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2436435993528789681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c92d46695b847940990ebc443a8195f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: -7
+  AttackPower: 1
+  TimeToExpire: 2

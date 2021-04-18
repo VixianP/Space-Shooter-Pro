@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 1811791473421634912}
   - component: {fileID: 2623461148158734144}
   - component: {fileID: 1344269801}
+  - component: {fileID: 75379483}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -223,10 +224,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 366f6a08ebef20b4984ed6e3738c1bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
-  MaxSpeed: 20
+  BaseSpeed: 2
+  MaxSpeed: 10
+  ThrusterSpeed: 2
+  ThrusterSpeedAnim: 0
   LaserPrefab: {fileID: 2747728255292702028, guid: 365f5198b8f842b4898b1b27873c1d36,
     type: 3}
+  Projectiles:
+  - {fileID: 1800118985642972221, guid: e51c2ce6d6a30cb41b65f12496c716a6, type: 3}
+  SkillCD:
+  - -1
+  Ammo1: 15
+  Ammoref1: 0
   TripleShot: {fileID: 1305977801254190013, guid: 30005e81f58af744aab7ac9e11abaaf3,
     type: 3}
   Shield: {fileID: 8651066944733916587}
@@ -237,6 +246,7 @@ MonoBehaviour:
   TriplerShotTime: -1
   FireRate: 0.1
   PlayerHealth: 3
+  ShieldHealth: 0
   RightEngine: {fileID: 5564439888671611265}
   LeftEngine: {fileID: 2040953009956649548}
   PlayerExplode: {fileID: 9180792807443538694, guid: d67603c4d9c14f342bbdcfd943f72056,
@@ -246,6 +256,7 @@ MonoBehaviour:
   PlayerFX:
   - {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   - {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  Thruster: {fileID: 6780174870968404953}
 --- !u!70 &2623461148158734144
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -272,7 +283,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.28
   m_Pitch: 0.2
@@ -358,6 +369,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &75379483
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4702271636571153714}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1f7e907cbe65dbc43a8fe461e6c60b16, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5564439888671611265
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,8 +516,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5791008765530142543}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.02, y: -2.076, z: 0}
-  m_LocalScale: {x: 0.22106983, y: 0.31992865, z: 0.39164925}
+  m_LocalPosition: {x: -0.02, y: -2.01, z: 0}
+  m_LocalScale: {x: 0.18173715, y: 0.26300704, z: 0.32196712}
   m_Children: []
   m_Father: {fileID: 5751427806526099486}
   m_RootOrder: 0

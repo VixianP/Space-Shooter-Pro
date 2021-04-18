@@ -42,6 +42,12 @@ public class PowerUp : MonoBehaviour
                 case 2:
                     player.ShieldActive();
                     break;
+                case 3:
+                    player.Reload();
+                    break;
+                case 4:
+                    player.Heal();
+                    break;
         }
             AudioSource.PlayClipAtPoint(PowerUpAudio, transform.position);
             Destroy(gameObject);

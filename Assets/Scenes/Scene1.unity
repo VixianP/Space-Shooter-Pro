@@ -121,31 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &75379476 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4702271636571153714, guid: a052df4a0b71b3241b5676ee4ae0f979,
-    type: 3}
-  m_PrefabInstance: {fileID: 1939118816}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &75379483
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 75379476}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1f7e907cbe65dbc43a8fe461e6c60b16, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &76971059
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +236,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &217440498 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4113937302884815364, guid: f8877ed089ef53648ba4e946b59a833f,
+    type: 3}
+  m_PrefabInstance: {fileID: 8213185278331227747}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &359608039
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -328,6 +315,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Asteroid
       objectReference: {fileID: 0}
+    - target: {fileID: 2251403498806003101, guid: 45c4c9c78540e7c4796551a465590049,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4270592563953492012, guid: 45c4c9c78540e7c4796551a465590049,
         type: 3}
       propertyPath: RotSpeed
@@ -364,7 +356,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 5b17a0088dcdf924fa92da5af1e1be07, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 0.5
   Loop: 1
   Mute: 0
@@ -647,6 +639,7 @@ GameObject:
   - component: {fileID: 874600627}
   - component: {fileID: 874600626}
   - component: {fileID: 874600629}
+  - component: {fileID: 874600630}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -779,6 +772,25 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!95 &874600630
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874600625}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: db46dd701ff3f0e4ab83a8564e2d79ca, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1252086241 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9142150859304729059, guid: b224f81318e3fc84eba5103ea1b5f355,
@@ -858,60 +870,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1344269801, guid: a052df4a0b71b3241b5676ee4ae0f979, type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
-    - target: {fileID: 57149430806916577, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 57149430806916577, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 57149430806916577, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.18173715
-      objectReference: {fileID: 0}
-    - target: {fileID: 57149430806916577, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.26300704
-      objectReference: {fileID: 0}
-    - target: {fileID: 57149430806916577, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.32196712
-      objectReference: {fileID: 0}
-    - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: MaxSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: Speed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: ThrusterSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: BaseSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
-        type: 3}
-      propertyPath: Thruster
-      value: 
-      objectReference: {fileID: 1939118817}
     - target: {fileID: 4702271636571153714, guid: a052df4a0b71b3241b5676ee4ae0f979,
         type: 3}
       propertyPath: m_Name
@@ -974,12 +932,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a052df4a0b71b3241b5676ee4ae0f979, type: 3}
---- !u!95 &1939118817 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6780174870968404953, guid: a052df4a0b71b3241b5676ee4ae0f979,
-    type: 3}
-  m_PrefabInstance: {fileID: 1939118816}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2044840155
 GameObject:
   m_ObjectHideFlags: 0
@@ -1153,25 +1105,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1825865346, guid: f8877ed089ef53648ba4e946b59a833f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2034184763, guid: f8877ed089ef53648ba4e946b59a833f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1873589134}
-    - target: {fileID: 5481495002184323972, guid: f8877ed089ef53648ba4e946b59a833f,
+    - target: {fileID: 4967527576867489804, guid: f8877ed089ef53648ba4e946b59a833f,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5481495002524974700, guid: f8877ed089ef53648ba4e946b59a833f,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5481495002524974703, guid: f8877ed089ef53648ba4e946b59a833f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: BoostSlider
+      value: 
+      objectReference: {fileID: 217440498}
     - target: {fileID: 8213185277602090624, guid: f8877ed089ef53648ba4e946b59a833f,
         type: 3}
       propertyPath: m_Name
@@ -1261,11 +1207,6 @@ PrefabInstance:
       propertyPath: SceneLoaderGameObject
       value: 
       objectReference: {fileID: 1873589133}
-    - target: {fileID: 9142150859304729058, guid: b224f81318e3fc84eba5103ea1b5f355,
-        type: 3}
-      propertyPath: EnemySpawnTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9142150859304729059, guid: b224f81318e3fc84eba5103ea1b5f355,
         type: 3}
       propertyPath: m_Name

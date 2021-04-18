@@ -22,6 +22,11 @@ public class UIManager : MonoBehaviour
     Canvas PlayerUICanvas;
     [SerializeField]
     Canvas PauseMenuUI;
+    [SerializeField]
+    Slider BoostSlider;
+
+    [SerializeField]
+    private Text AmmoCount;
 
     private void Start()
     {
@@ -44,6 +49,10 @@ public class UIManager : MonoBehaviour
             LivesImage.sprite = LivesSprite[0];
         }
     }
+    public void UpdateAmmo(int Ammo)
+    {
+        AmmoCount.text = Ammo.ToString();
+    }
     public void GameOver()
     {
         GameOverText.SetActive(true);
@@ -62,4 +71,9 @@ public class UIManager : MonoBehaviour
         PauseMenuUI.gameObject.SetActive(false);
         Time.timeScale = 1;
     }
+    public void UpdateBoostUI(float boost)
+    {
+        BoostSlider.value += boost;
+    }
+
 }
