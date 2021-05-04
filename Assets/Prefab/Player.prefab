@@ -231,6 +231,9 @@ MonoBehaviour:
   LaserPrefab: {fileID: 2747728255292702028, guid: 365f5198b8f842b4898b1b27873c1d36,
     type: 3}
   Projectiles:
+  - {fileID: 2747728255292702028, guid: 365f5198b8f842b4898b1b27873c1d36, type: 3}
+  - {fileID: 1305977801254190013, guid: 30005e81f58af744aab7ac9e11abaaf3, type: 3}
+  - {fileID: 6450967861985008672, guid: fc2cfcdb6e7d5f3419a03f2d85b3a565, type: 3}
   - {fileID: 1800118985642972221, guid: e51c2ce6d6a30cb41b65f12496c716a6, type: 3}
   SkillCD:
   - -1
@@ -244,14 +247,14 @@ MonoBehaviour:
   IsInvul: 0
   CanFire: -1
   TriplerShotTime: -1
+  RocketShotTime: -1
   FireRate: 0.1
   PlayerHealth: 3
-  ShieldHealth: 0
   RightEngine: {fileID: 5564439888671611265}
   LeftEngine: {fileID: 2040953009956649548}
   PlayerExplode: {fileID: 9180792807443538694, guid: d67603c4d9c14f342bbdcfd943f72056,
     type: 3}
-  IsTripleShotActive: 0
+  ShotID: 0
   Score: 0
   PlayerFX:
   - {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}

@@ -7,6 +7,9 @@ public class PowerUp : MonoBehaviour
 
     [SerializeField]
     private float speed = 3;
+    /*
+     * 
+     */
     [SerializeField]
     private int PowerUpID;
 
@@ -47,6 +50,9 @@ public class PowerUp : MonoBehaviour
                     break;
                 case 4:
                     player.Heal();
+                    break;
+                case 5:
+                    player.RocketActive();
                     break;
         }
             AudioSource.PlayClipAtPoint(PowerUpAudio, transform.position);

@@ -14,6 +14,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] PowerUp;
     private int PowerUpSelection;
+    [SerializeField]
+    float Tier1PowerUpTimer = 10;
 
     [SerializeField]
     GameObject UIManagerGameObject;
@@ -40,12 +42,18 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator PowerUpCoroutine()
     {
-        yield return new WaitForSeconds(1);
         while (IsPlayerDead == false)
         {
-            PowerUpSelection = Random.Range(0, PowerUp.Length);
-            GameObject NewPowerUp = Instantiate(PowerUp[PowerUpSelection], new Vector3(Random.Range(-7.20f, 7.20f), 8f, 0), Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(3, 8));
+                if(Time.time > Tier1PowerUpTimer)
+            {
+                PowerUpSelection = Random.Range(3, PowerUp.Length);
+                GameObject Tier1PowerUp = Instantiate(PowerUp[PowerUpSelection], new Vector3(Random.Range(-7.20f, 7.20f), 8f, 0), Quaternion.identity);
+                yield return new WaitForSeconds(Random.Range(3, 8));
+                Tier1PowerUpTimer = Time.time + 10;
+            }
+                PowerUpSelection = Random.Range(0, 2);
+                GameObject NewPowerUp = Instantiate(PowerUp[PowerUpSelection], new Vector3(Random.Range(-7.20f, 7.20f), 8f, 0), Quaternion.identity);
+                yield return new WaitForSeconds(Random.Range(3, 8));
         }
     }
 
@@ -57,7 +65,7 @@ public class SpawnManager : MonoBehaviour
    
     IEnumerator EnemyCoroutine(float time)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.5f);
         while (IsPlayerDead == false)
         {
             GameObject NewEnemy = Instantiate(Enemy, new Vector3(Random.Range(-8.20f, 8.20f), 8f, 0), Quaternion.Euler(180, 0, 0));
@@ -78,5 +86,5 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    //public method to update method and call enemy coroutine
+
 }

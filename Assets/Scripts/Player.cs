@@ -4,50 +4,89 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    /*[Summary]
+     * This section handles the player's speed
+     * 
+     * 
+     * 
+     */
     [SerializeField] 
     private float BaseSpeed = 5;
     [SerializeField]
     private float MaxSpeed = 20;
-    [SerializeField]
     private float ThrusterSpeed;
     private float speed;
     [SerializeField][Range(0,1)]
     private float ThrusterSpeedAnim;
-    private float BoostTime;
+    private bool CanBoost = true;
 
-    [SerializeField]
-    private GameObject LaserPrefab;
-
+    /*[Summary]
+     * This section handles all laser instantantiation and Cooldowns
+     * [End]
+     * 
+     * 
+     * projectile array list
+     * 
+     * [0 - Normal Shot]
+     * [1 - Triple Shot]
+     * [2 - Explosive Rockets]
+     * [3 - Homing Missles]
+     * 
+     * [Variable Doc]
+     * 
+     * Projectile array is used to store our projectile prefabs for later use. 
+     * ie: instantiate on fire();
+     * 
+     * SkillCD handles the Cool down of each abillity set in input S D F G.
+     * Each ship will have four abillities that will differ from each other, Thus the reason to create an array.
+     * 
+     * TripleShotTime and RocketShotTime is the duration of its suggested ammo type.
+     * Note: The Difference bettween RocketShot and Missle is that:
+     *         
+     *         Rocket Explodes, Missle follows.
+     * 
+     * CanFire  is the general cooldown for the player's Basic Projectile.
+     * 
+     * Ammo1 is a volitle variable that will alter when the player fires. 
+     * Its used in a way to check the amount of ammo the player has
+     * at all times.
+     * 
+     * Ammoref is a "static" variable that keep track of the players orginal starting ammo. 
+     * We refer to this when the player needs to reload.
+     * ie: ammo1 = ammoref
+     * 
+     * FireRate Affects the rate of fire of all projectiles. This variable will change based on what
+     * Projectile the player is shooting
+     * FireRateRef keeps the original value of our FireRate variable. It is used to return FireRate back
+     * its original value.
+     *
+     * 
+     * [Variable Doc End]
+     * 
+     */
     [SerializeField]
     GameObject[] Projectiles;
     [SerializeField]
     float[] SkillCD;
     [SerializeField]
     int Ammo1;
-    [SerializeField]
     int Ammoref1;
-
-
+    private float TriplerShotTime = -1;
+    private float RocketShotTime = -1;
+    private float CanFire = -1;
     [SerializeField]
-    private GameObject TripleShot;
+    private float FireRate = 0.5f;
+    private float FireRateRef;
+
     [SerializeField]
     private GameObject Shield;
     [SerializeField]
     private float BulletOffSet;
 
-    [SerializeField]
     private float InvulnTime = -1;
     [SerializeField]
     private bool IsInvul = false;
 
-    [SerializeField]
-    private float CanFire = -1;
-    private bool CanBoost = true;
-
-    [SerializeField]
-    private float TriplerShotTime = -1;
-    [SerializeField]
-    private float FireRate = 0.5f;
     [SerializeField]
     private int PlayerHealth = 3;
     private int ShieldHealth = 0;
@@ -65,7 +104,7 @@ public class Player : MonoBehaviour
     GameObject PlayerExplode;
 
     [SerializeField]
-    private bool IsTripleShotActive;
+    int ShotID;
 
     [SerializeField]
     private int Score;
@@ -83,7 +122,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         speed = BaseSpeed;
-        ThrusterSpeed = speed * ThrusterSpeed;
+        FireRateRef = FireRate;
+        ThrusterSpeed = speed * 2;
         GameObject FindSpawnManager = GameObject.Find("Spawn Manager");
         if(FindSpawnManager != null)
         {
@@ -122,20 +162,44 @@ public class Player : MonoBehaviour
     }
     void Fire()
     {
-        if (Input.GetKey(KeyCode.A ) && Time.time >= CanFire)
+        if (Input.GetKey(KeyCode.A) && Time.time >= CanFire)
         {
             CanFire = Time.time + FireRate;
-            if(IsTripleShotActive == true && Time.time < TriplerShotTime)
+            switch (ShotID)
             {
-                Instantiate(TripleShot, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
-                PlayerAudio.Play();
-                PlayerAudio.volume = 6;
-            } else
-            {
-                IsTripleShotActive = false;
-                Instantiate(LaserPrefab, new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
-                PlayerAudio.Play();
-                PlayerAudio.volume = 4;
+                case 0: 
+                    Instantiate(Projectiles[0], new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
+                    PlayerAudio.Play();
+                    PlayerAudio.volume = 4;
+
+
+                    break;
+                case 1:
+                    if (ShotID == 1 && Time.time < TriplerShotTime)
+                    {
+                        Instantiate(Projectiles[1], new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
+                        PlayerAudio.Play();
+                        PlayerAudio.volume = 6;
+                    }
+                    else
+                    {
+                        ShotID = 0;
+                    }
+                    break;
+                case 2:
+                    if (ShotID == 2 && Time.time < RocketShotTime)
+                    {
+                        FireRate = 0.55f;
+                        Instantiate(Projectiles[2], new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
+                        PlayerAudio.Play();
+                        PlayerAudio.volume = 6;
+                    }
+                    else
+                    {
+                        ShotID = 0;
+                        FireRate = FireRateRef;
+                    }
+                    break;
             }
         }
     }
@@ -147,24 +211,23 @@ public class Player : MonoBehaviour
         
         if (Input.GetKey(KeyCode.LeftShift) && CanBoost == true)
         {
-            StartCoroutine(Boost(0.2f));
-            if (BaseSpeed >= ThrusterSpeed)
+            StartCoroutine(Boost(ThrusterSpeed * 0.02f));
+            if (speed >= ThrusterSpeed)
             {
-                BaseSpeed = ThrusterSpeed;
                 CanBoost = false;
             }
         } else
         {
-            StartCoroutine(Deccerlate(-0.2f));
-            if (BaseSpeed <= speed)
+            StartCoroutine(Deccerlate(-ThrusterSpeed * 0.02f));
+            if (speed <= BaseSpeed)
             {
-                BaseSpeed = speed;
+                speed = BaseSpeed;
             }
         }
  
         if (IsDodging == false)
         {
-            transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0) * BaseSpeed * Time.deltaTime);
+            transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0) * speed * Time.deltaTime);
         }
     }
     
@@ -218,14 +281,26 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void RocketActive()
+    {
+        if (ShotID == 2)
+        {
+            RocketShotTime += 5;
+        }
+        else
+        {
+            ShotID = 2;
+            RocketShotTime = Time.time + 5;
+        }
+    }
     public void TripleShotActive()
     {
-        if(IsTripleShotActive == true)
+        if(ShotID == 1)
         {
             TriplerShotTime += 5;
         } else
         {
-            IsTripleShotActive = true;
+            ShotID = 1;
             TriplerShotTime = Time.time + 5;
         }
     }
@@ -235,6 +310,7 @@ public class Player : MonoBehaviour
         {
             BaseSpeed += 1;
             speed = BaseSpeed;
+            ThrusterSpeed = speed + speed * 0.2f;
         } else
         {
             BaseSpeed = MaxSpeed;
@@ -340,7 +416,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < 7;)
         {
-            Instantiate(Projectiles[0], transform.position, Quaternion.identity);
+            Instantiate(Projectiles[3], transform.position, Quaternion.identity);
             PlayerAudio.Play();
             PlayerAudio.volume = 4;
             yield return new WaitForSeconds(0.1f);
@@ -374,34 +450,44 @@ public class Player : MonoBehaviour
     }
     IEnumerator Boost(float boostnum)
     {
-        if(BaseSpeed < ThrusterSpeed)
+        if(speed < ThrusterSpeed)
         {
             yield return new WaitForSeconds(0.1f);
-            BaseSpeed += boostnum;
-            PUI.UpdateBoostUI(0.1f);
+            speed += boostnum;
+            PUI.UpdateBoostUI(speed * 0.01f);
             Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim+= 0.1f);
-            if(ThrusterSpeedAnim < 0)
+            if (ThrusterSpeedAnim > 1)
             {
-                ThrusterSpeedAnim = 0;
+                ThrusterSpeedAnim = 1;
+            }
+            if(speed > ThrusterSpeed)
+            {
+                speed = ThrusterSpeed;
             }
         }
     }
     IEnumerator Deccerlate(float boostnum)
     {
-        if(BaseSpeed > speed)
+        if(speed > BaseSpeed)
         {
             yield return new WaitForSeconds(0.5f);
-            BaseSpeed += boostnum;
-            PUI.UpdateBoostUI(-0.1f);
+            speed += boostnum;
+            PUI.UpdateBoostUI(-speed * 0.01f);
             Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim -= 0.1f);
-            if (ThrusterSpeedAnim > 1)
+            if (ThrusterSpeedAnim < 0)
             {
-                ThrusterSpeedAnim = 1;
+                ThrusterSpeedAnim = 0;
             }
+            if (speed < BaseSpeed)
+            {
+                speed = BaseSpeed;
+            }
+
         } else
         {
             CanBoost = true;
         }
     }
+ 
  
 }

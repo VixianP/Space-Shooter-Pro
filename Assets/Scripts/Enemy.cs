@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour
             speed = 1;
             AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
             IsDead = true;
-            Destroy(gameObject);
+            Destroy(gameObject,2);
         }
     }
 }
