@@ -49,9 +49,9 @@ public class UIManager : MonoBehaviour
             LivesImage.sprite = LivesSprite[0];
         }
     }
-    public void UpdateAmmo(int Ammo)
+    public void UpdateAmmo(int Ammo, int ammo2)
     {
-        AmmoCount.text = Ammo.ToString();
+        AmmoCount.text = Ammo +"/"+ammo2;
     }
     public void GameOver()
     {

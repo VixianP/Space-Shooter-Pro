@@ -384,7 +384,7 @@ public class Player : MonoBehaviour
                     Ammo1--;
                     SkillCD[0] = Time.time + 1;
                     StartCoroutine(BurstfireTimer());
-                    PUI.UpdateAmmo(Ammo1);
+                    PUI.UpdateAmmo(Ammo1,Ammoref1);
                 }
             }
         }
@@ -427,7 +427,7 @@ public class Player : MonoBehaviour
     public void Reload()
     {
         Ammo1 = Ammoref1;
-        PUI.UpdateAmmo(Ammo1);
+        PUI.UpdateAmmo(Ammo1,Ammoref1);
     }
     public void Heal()
     {
