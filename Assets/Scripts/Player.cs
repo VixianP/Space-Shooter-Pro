@@ -15,10 +15,20 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float MaxSpeed = 20;
     private float ThrusterSpeed;
+    [SerializeField]
     private float speed;
     [SerializeField][Range(0,1)]
     private float ThrusterSpeedAnim;
     private bool CanBoost = true;
+    private bool IsBoosting;
+    private float InvulnTime = -1;
+    private float DashTime = -1; //dash input timer
+    [SerializeField]
+    private float DashCoolDown; //variable to control input cooldown
+    [SerializeField]
+    private bool IsInvul = false;
+    private bool IsDodging;
+
 
     /*[Summary]
      * This section handles all laser instantantiation and Cooldowns
@@ -83,10 +93,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float BulletOffSet;
 
-    private float InvulnTime = -1;
-    [SerializeField]
-    private bool IsInvul = false;
-
     [SerializeField]
     private int PlayerHealth = 3;
     private int ShieldHealth = 0;
@@ -114,7 +120,6 @@ public class Player : MonoBehaviour
     AudioSource PlayerAudio;
 
     private bool IsPaused = false;
-    private bool IsDodging;
 
     [SerializeField]
     Animator Thruster;
@@ -123,7 +128,7 @@ public class Player : MonoBehaviour
     {
         speed = BaseSpeed;
         FireRateRef = FireRate;
-        ThrusterSpeed = speed * 2;
+        ThrusterSpeed = speed * 4;
         GameObject FindSpawnManager = GameObject.Find("Spawn Manager");
         if(FindSpawnManager != null)
         {
@@ -208,27 +213,15 @@ public class Player : MonoBehaviour
     {
         float HorizontalInput = Input.GetAxis("Horizontal");
         float VerticalInput = Input.GetAxis("Vertical");
-        
-        if (Input.GetKey(KeyCode.LeftShift) && CanBoost == true)
+        //check if object collider if dodging
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time > DashTime)
         {
-            StartCoroutine(Boost(ThrusterSpeed * 0.02f));
-            if (speed >= ThrusterSpeed)
-            {
-                CanBoost = false;
-            }
-        } else
-        {
-            StartCoroutine(Deccerlate(-ThrusterSpeed * 0.02f));
-            if (speed <= BaseSpeed)
-            {
-                speed = BaseSpeed;
-            }
-        }
- 
-        if (IsDodging == false)
-        {
+            IsBoosting = true;
+            StartCoroutine(Boost(ThrusterSpeed / 1.5f));
+            DashTime = Time.time + DashCoolDown;
+        } 
+
             transform.Translate(new Vector3(HorizontalInput, VerticalInput, 0) * speed * Time.deltaTime);
-        }
     }
     
      void Boundaries()
@@ -255,7 +248,7 @@ public class Player : MonoBehaviour
         {
             Shield.SetActive(false);
         }
-        if(IsInvul == false)
+        if(IsInvul == false && IsDodging == false)
         {
             PlayerHealth -= dmg;
             PUI.UpdateLives(PlayerHealth);
@@ -271,10 +264,10 @@ public class Player : MonoBehaviour
                     break;
             }
         }
-        if(PlayerHealth < 1 && IsInvul == false)
+        if(PlayerHealth < 1)
         {
             Main.GetComponent<Animator>().SetTrigger("Shake");
-            Destroy(gameObject.GetComponent<Collider2D>()); //show atomic bomb
+            Destroy(gameObject.GetComponent<Collider2D>()); 
             spawnManager.OnPlayerDeath();
             Destroy(gameObject,0.2f);
             Instantiate(PlayerExplode, transform.position, Quaternion.identity);
@@ -310,7 +303,7 @@ public class Player : MonoBehaviour
         {
             BaseSpeed += 1;
             speed = BaseSpeed;
-            ThrusterSpeed = speed + speed * 0.2f;
+            ThrusterSpeed = speed * 3;
         } else
         {
             BaseSpeed = MaxSpeed;
@@ -448,21 +441,31 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
+    //invulnerbitlity timer
     IEnumerator Boost(float boostnum)
     {
         if(speed < ThrusterSpeed)
         {
-            yield return new WaitForSeconds(0.1f);
-            speed += boostnum;
-            PUI.UpdateBoostUI(speed * 0.01f);
-            Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim+= 0.1f);
-            if (ThrusterSpeedAnim > 1)
+            IsDodging = true;
+            while (IsBoosting == true)
             {
-                ThrusterSpeedAnim = 1;
-            }
-            if(speed > ThrusterSpeed)
-            {
-                speed = ThrusterSpeed;
+                yield return new WaitForSeconds(0.1f);
+                speed += boostnum;
+                PUI.UpdateBoostUI(speed * 0.001f,2);
+                Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim += speed * .10f);
+                if (ThrusterSpeedAnim > 1)
+                {  
+                    ThrusterSpeedAnim = 1;
+                }
+                if (speed > ThrusterSpeed)
+                {  
+                    speed = ThrusterSpeed;
+                    PUI.UpdateBoostUI(0, 1);
+                    CanBoost = false;
+                    StartCoroutine(Deccerlate(-ThrusterSpeed * 0.5f));
+                    IsBoosting = false;
+                }
             }
         }
     }
@@ -470,23 +473,28 @@ public class Player : MonoBehaviour
     {
         if(speed > BaseSpeed)
         {
-            yield return new WaitForSeconds(0.5f);
-            speed += boostnum;
-            PUI.UpdateBoostUI(-speed * 0.01f);
-            Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim -= 0.1f);
-            if (ThrusterSpeedAnim < 0)
+            while (CanBoost == false)
             {
-                ThrusterSpeedAnim = 0;
+                yield return new WaitForSeconds(0.1f);
+                speed += boostnum;
+                PUI.UpdateBoostUI(-speed * 0.001f,2);
+                Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim -= 0.1f);
+                if (ThrusterSpeedAnim < 0)
+                {
+                    ThrusterSpeedAnim = 0;
+                }
+                if (speed < BaseSpeed)
+                {
+                    speed = BaseSpeed;
+                    PUI.UpdateBoostUI(0, 0);
+                    IsDodging = false;
+                    CanBoost = true;
+                }
             }
-            if (speed < BaseSpeed)
-            {
-                speed = BaseSpeed;
-            }
-
-        } else
-        {
-            CanBoost = true;
-        }
+        } 
+        
+            
+        
     }
  
  

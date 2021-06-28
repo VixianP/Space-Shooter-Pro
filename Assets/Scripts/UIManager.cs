@@ -71,9 +71,17 @@ public class UIManager : MonoBehaviour
         PauseMenuUI.gameObject.SetActive(false);
         Time.timeScale = 1;
     }
-    public void UpdateBoostUI(float boost)
+    public void UpdateBoostUI(float boost,int MinMax)//used to round off values
     {
         BoostSlider.value += boost;
+        if(MinMax == 1)
+        {
+            BoostSlider.value = 1;
+        } else if(MinMax == 0)
+        {
+            BoostSlider.value = 0;
+        }
+       
     }
 
 }
