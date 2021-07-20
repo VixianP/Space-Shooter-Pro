@@ -124,6 +124,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     Animator Thruster;
 
+    [SerializeField]
+    private GameObject PAGameObject;
+    Player_AssistHandlerScript PA;
+
     void Start()
     {
         speed = BaseSpeed;
@@ -146,6 +150,10 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("PLAYER:UIManager is null");
         }
+        if (PAGameObject != null)
+        {
+            PA = PAGameObject.GetComponent<Player_AssistHandlerScript>();
+        }
         Main = Camera.main;
         PUI.UpdateLives(PlayerHealth);
         PlayerAudio = GetComponent<AudioSource>();
@@ -162,6 +170,10 @@ public class Player : MonoBehaviour
             Abillites();
             Boundaries();
             Movement();
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                PA.SpawnAssist();
+            }
         }
         PauseGame();
     }

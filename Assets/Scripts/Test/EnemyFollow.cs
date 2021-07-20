@@ -4,55 +4,58 @@ using UnityEngine;
 
 public class EnemyFollow : MonoBehaviour
 {
-    private Vector2 Direction = new Vector2(0,-1);
 
-    bool isDead = false;
-    bool isTurning = false;
-    bool LeftRight = false;
+    FollowBehaviorScript FBS;
+    [SerializeField]
+    private GameObject FollowBehaviorGameObject;
+    [SerializeField]
+    private int NumberInRow;
 
-    float MovementTimer = -1;
-
-    //set 5 in a row and adjust values accordingly. this will be a seperate group of spawned enemies
-    //int turntime
-    //int forward time
-
-    //two phase, following and not following
-
-    //first in list and last. if last in list then follow one index below
-
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        Movement();
-        transform.Translate(Direction * Time.deltaTime);
-    }
-    
-    void Movement()
-    {
-        if(Time.time > MovementTimer)
+        FBS = FollowBehaviorGameObject.GetComponent<FollowBehaviorScript>();
+        for (int x = 0; x < FBS.EShips.Count; x++)
         {
-            if(isTurning == false)
+            if (FBS.EShips[x] == this.gameObject)
             {
-                Direction = new Vector2(0, -1);
-                isTurning = true;
-                MovementTimer = Time.time + 4;
-            } else if(isTurning == true)
-            {
-                if(LeftRight == false)
-                {
-                    Direction = new Vector2(-1, 0);
-                    LeftRight = !LeftRight;
-                    isTurning = false;
-                    MovementTimer = Time.time + 3;
-                } else if(LeftRight == true)
-                {
-                    Direction = new Vector2(1, 0);
-                    LeftRight = !LeftRight;
-                    isTurning = false;
-                    MovementTimer = Time.time + 3;
-                }
+                print(this.gameObject + " was found in " + FBS.EShips[x]);
+                NumberInRow = x;
+                return;
             }
         }
     }
+    private void Update()
+    {
+        Kill();
+    }
+    void Kill()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (NumberInRow == 1)
+            {
+                FBS.EShips.RemoveAt(0);
+                FBS.ReAdjustID();
+                Destroy(this.gameObject);
+            }
+        }
+    }
+    void FollowShip()
+    {
 
+    }
+    void Resort()
+    {
+                for (int x = 0; x < FBS.EShips.Count; x++)
+                {
+                    if (FBS.EShips[x] == this.gameObject)
+                    {
+                        print(this.gameObject + " was found in " + FBS.EShips[x]);
+                        NumberInRow = x;
+                        return;
+                    }
+                }
+            
+        
+    }
 }

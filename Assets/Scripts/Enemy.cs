@@ -34,7 +34,9 @@ public class Enemy : MonoBehaviour
     private GameObject Elaser;
 
     private bool IsDead;
-    // Start is called before the first frame update
+    [SerializeField]
+    private bool IsFollow;
+    
     void Start()
     {
         if (player == null)
@@ -64,7 +66,14 @@ public class Enemy : MonoBehaviour
     }
     void Emovement()
     {
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
+        if (IsFollow & Vector3.Distance(transform.position, player.transform.position) > 2)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 0.01f);
+        }
+        else
+        {
+            transform.Translate(Vector3.up * speed * Time.deltaTime);
+        }
     }
     void Eboundaries()
     {
