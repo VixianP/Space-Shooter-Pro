@@ -15,7 +15,6 @@ public class EnemyLaser : MonoBehaviour
     Player PlayerScript;
 
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(0, speed * Time.deltaTime, 0);
@@ -23,12 +22,13 @@ public class EnemyLaser : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        PlayerScript = collision.GetComponent<Player>();
             if (collision.tag == "Player")
             {
-                PlayerScript = collision.GetComponent<Player>();
-                PlayerScript.Damage(AttackPower);
-                Destroy(gameObject);
+                PlayerScript.Damage(AttackPower,gameObject);
+                
             }
+        
         
     }
     public void UpdateSpecs(float LSpeed, int Dmg)

@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float DashCoolDown; //variable to control input cooldown
     [SerializeField]
-    private bool IsInvul = false;
+    public bool IsInvul = false;
     private bool IsDodging;
 
 
@@ -249,8 +249,9 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(11, transform.position.y, 0);
         }
     }
-   public void Damage(int dmg)
+   public void Damage(int dmg,GameObject obj)
     {
+        
         if (ShieldHealth > 1)
         {
             Shield.transform.localScale = Shield.transform.localScale * .8f;
@@ -260,10 +261,28 @@ public class Player : MonoBehaviour
         {
             Shield.SetActive(false);
         }
+        if(obj.tag == "Enemy")
+        {
+            PlayerHealth -= dmg;
+            PUI.UpdateLives(PlayerHealth);
+            Destroy(obj);
+            switch (PlayerHealth)
+            {
+                case 2:
+                    LeftEngine.SetActive(true);
+                    Main.GetComponent<Animator>().SetTrigger("Shake");
+                    break;
+                case 1:
+                    Main.GetComponent<Animator>().SetTrigger("Shake");
+                    RightEngine.SetActive(true);
+                    break;
+            }
+        }
         if(IsInvul == false && IsDodging == false)
         {
             PlayerHealth -= dmg;
             PUI.UpdateLives(PlayerHealth);
+            Destroy(obj);
             switch (PlayerHealth)
             {
                 case 2:
@@ -327,6 +346,7 @@ public class Player : MonoBehaviour
     {
         if (IsDodging == false)
         {
+            //speedboost 
             if (Time.time < InvulnTime)
             {
                 InvulnTime = Time.time + 5;
@@ -343,14 +363,17 @@ public class Player : MonoBehaviour
             {
                 InvulnTime = Time.time + 0.9f;
                 IsInvul = true;
+                print("true");
             }
             else
             {
+                print("false");
                 IsInvul = false;
                 IsDodging = false;
             }
         }
     }
+    
     public void ShieldActive()
     {
         ShieldHealth = 3;
@@ -454,7 +477,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    //invulnerbitlity timer
     IEnumerator Boost(float boostnum)
     {
         if(speed < ThrusterSpeed)

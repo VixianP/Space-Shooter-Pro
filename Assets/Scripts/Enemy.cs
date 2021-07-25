@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
 
     private bool IsDead;
     [SerializeField]
-    private bool IsFollow;
+    private bool IsMove;
     
     void Start()
     {
@@ -66,14 +66,7 @@ public class Enemy : MonoBehaviour
     }
     void Emovement()
     {
-        if (IsFollow & Vector3.Distance(transform.position, player.transform.position) > 2)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, 0.01f);
-        }
-        else
-        {
             transform.Translate(Vector3.up * speed * Time.deltaTime);
-        }
     }
     void Eboundaries()
     {
@@ -89,9 +82,8 @@ public class Enemy : MonoBehaviour
                 EnemyCollider.enabled = false;
                 speed = 1;
                 EnemyAnimator.SetTrigger("ED");
-                player.Damage(EnemyCollisionDamage);
+                player.Damage(EnemyCollisionDamage,gameObject);
                 AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
-                Destroy(gameObject);
         }
     }
     void EnemyFire()
