@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    #region Player Speed/Thruster
     /*[Summary]
      * This section handles the player's speed
      * 
@@ -28,8 +29,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     public bool IsInvul = false;
     private bool IsDodging;
-
-
+    #endregion
+    #region Projectile Properties
     /*[Summary]
      * This section handles all laser instantantiation and Cooldowns
      * [End]
@@ -70,6 +71,7 @@ public class Player : MonoBehaviour
      * FireRateRef keeps the original value of our FireRate variable. It is used to return FireRate back
      * its original value.
      *
+     *ShotID is used to switch bettween various projectiles
      * 
      * [Variable Doc End]
      * 
@@ -89,6 +91,11 @@ public class Player : MonoBehaviour
     private float FireRateRef;
 
     [SerializeField]
+    int ShotID;
+
+    #endregion
+    #region Health,Shield,Damage Effect
+    [SerializeField]
     private GameObject Shield;
     [SerializeField]
     private float BulletOffSet;
@@ -97,20 +104,15 @@ public class Player : MonoBehaviour
     private int PlayerHealth = 3;
     private int ShieldHealth = 0;
    
-    
-    SpawnManager spawnManager;
-    UIManager PUI;
-    Camera Main;
-
     [SerializeField]
     GameObject RightEngine;
     [SerializeField]
     GameObject LeftEngine;
     [SerializeField]
     GameObject PlayerExplode;
+    #endregion
 
-    [SerializeField]
-    int ShotID;
+    Camera Main;
 
     [SerializeField]
     private int Score;
@@ -123,10 +125,17 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     Animator Thruster;
-
+    #region Player Assist
     [SerializeField]
-    private GameObject PAGameObject;
-    Player_AssistHandlerScript PA;
+    private List<GameObject> AssistGameObject = new List<GameObject>();
+    private GameObject TempTarget;
+    Player_Assist PARetarget;
+    private List<GameObject> ListOfAssist = new List<GameObject>();
+    private int AssistCount;
+    #endregion
+
+    SpawnManager spawnManager;
+    UIManager PUI;
 
     void Start()
     {
@@ -150,10 +159,6 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("PLAYER:UIManager is null");
         }
-        if (PAGameObject != null)
-        {
-            PA = PAGameObject.GetComponent<Player_AssistHandlerScript>();
-        }
         Main = Camera.main;
         PUI.UpdateLives(PlayerHealth);
         PlayerAudio = GetComponent<AudioSource>();
@@ -172,7 +177,7 @@ public class Player : MonoBehaviour
             Movement();
             if (Input.GetKeyDown(KeyCode.O))
             {
-                PA.SpawnAssist();
+                SpawnAssist();
             }
         }
         PauseGame();
@@ -530,6 +535,21 @@ public class Player : MonoBehaviour
             
         
     }
- 
- 
+    public void SpawnAssist()
+    {
+        AssistCount = ListOfAssist.Count;
+        GameObject NewAssist = Instantiate(AssistGameObject[0], this.transform.position, Quaternion.identity);
+        ListOfAssist.Add(NewAssist);
+        PARetarget = NewAssist.GetComponent<Player_Assist>();
+        if (AssistCount == 0)
+        {
+            PARetarget.Retarget(this.gameObject);
+        }
+        else if (AssistCount > 0)
+        {
+            TempTarget = ListOfAssist[AssistCount - 1];
+            PARetarget.Retarget(TempTarget);
+        }
+    }
+
 }

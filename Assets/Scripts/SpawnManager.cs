@@ -21,18 +21,19 @@ public class SpawnManager : MonoBehaviour
     GameObject UIManagerGameObject;
     [SerializeField]
     GameObject SceneLoaderGameObject;
-  
+    
+    
     private bool IsPlayerDead = false;
-
     UIManager UIM;
     SceneLoader SL;
 
     //enemy count
-    
     private void Awake()
     {
         SL = SceneLoaderGameObject.GetComponent<SceneLoader>();
         UIM = UIManagerGameObject.GetComponent<UIManager>();
+       
+        
     }
 
     private void Update()

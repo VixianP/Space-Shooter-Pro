@@ -17,7 +17,11 @@ public class Player_Assist : MonoBehaviour
         if(Target != null )
         {
             Fire();
-            if (Vector2.Distance(transform.position, Target.transform.position) > 0.9f)
+            if (Vector2.Distance(transform.position, Target.transform.position) > 1.2f)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, Target.transform.position, 0.08f);
+            }
+           else if (Vector2.Distance(transform.position, Target.transform.position) > 0.9f)
             {
                 transform.position = Vector2.MoveTowards(transform.position, Target.transform.position, 0.01f);
             }
@@ -33,7 +37,6 @@ public class Player_Assist : MonoBehaviour
     }
     public void Retarget(GameObject NewTarget)
     {
-        print("Hit");
         Target = NewTarget;
     }
 }

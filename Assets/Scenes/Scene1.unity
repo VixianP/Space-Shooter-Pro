@@ -1175,12 +1175,23 @@ PrefabInstance:
         type: 3}
       propertyPath: PAGameObject
       value: 
-      objectReference: {fileID: 2090582253}
+      objectReference: {fileID: 0}
     - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
         type: 3}
       propertyPath: ThrusterSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
+        type: 3}
+      propertyPath: AssistGameObject.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1811791473421634912, guid: a052df4a0b71b3241b5676ee4ae0f979,
+        type: 3}
+      propertyPath: AssistGameObject.Array.data[0]
+      value: 
+      objectReference: {fileID: 283754675351825903, guid: afd62124325c9024289099df0af153d9,
+        type: 3}
     - target: {fileID: 4702271636571153714, guid: a052df4a0b71b3241b5676ee4ae0f979,
         type: 3}
       propertyPath: m_Name
@@ -1352,12 +1363,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &2090582253 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7820641926816906606, guid: a052df4a0b71b3241b5676ee4ae0f979,
-    type: 3}
-  m_PrefabInstance: {fileID: 1939118816}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3536224118275731205
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1621,7 +1626,7 @@ PrefabInstance:
     - target: {fileID: 9142150859304729058, guid: b224f81318e3fc84eba5103ea1b5f355,
         type: 3}
       propertyPath: PowerUp.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9142150859304729058, guid: b224f81318e3fc84eba5103ea1b5f355,
         type: 3}
@@ -1634,6 +1639,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7485434140807206653, guid: a89352bc457a8504db087c1b8f7d45cd,
         type: 3}
+    - target: {fileID: 9142150859304729058, guid: b224f81318e3fc84eba5103ea1b5f355,
+        type: 3}
+      propertyPath: PowerUp.Array.data[6]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 9142150859304729058, guid: b224f81318e3fc84eba5103ea1b5f355,
         type: 3}
       propertyPath: SceneLoaderGameObject

@@ -54,6 +54,9 @@ public class PowerUp : MonoBehaviour
                 case 5:
                     player.RocketActive();
                     break;
+                case 6:
+                    player.SpawnAssist();
+                    break;
         }
             AudioSource.PlayClipAtPoint(PowerUpAudio, transform.position);
             Destroy(gameObject);
