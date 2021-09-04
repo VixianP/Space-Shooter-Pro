@@ -25,6 +25,7 @@ public class Player_Assist : MonoBehaviour
             {
                 transform.position = Vector2.MoveTowards(transform.position, Target.transform.position, 0.01f);
             }
+            
         }
     }
     void Fire()

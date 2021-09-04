@@ -89,8 +89,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2747728255292702028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: -0.79, z: 0}
-  m_LocalScale: {x: 0.29925025, y: 0.26163948, z: 1.1711566}
+  m_LocalPosition: {x: -1.5883, y: -0.4504, z: 0}
+  m_LocalScale: {x: 0.30835086, y: 0.17668514, z: 1.1711566}
   m_Children:
   - {fileID: 8078225675321716671}
   m_Father: {fileID: 0}
@@ -111,6 +111,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -158,9 +159,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df164174ffb745b4f9388b3671d6bb88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 35
+  EnemySpawnTime: 5
+  Enemy: []
+  EnemyContainer: {fileID: 0}
+  MaxEnemies: 0
+  EnemiesOnScreen: []
+  TimeInBettweenWavesTimer: 0
+  EnemyCount: 0
+  MaxWave: 0
+  WaveCount: 0
+  PowerUp: []
+  Tier1PowerUpTimer: 10
+  UIManagerGameObject: {fileID: 0}
+  SceneLoaderGameObject: {fileID: 0}
+  speed: 30
   AttackPower: 3
-  TimeToExpire: 2
+  TimeToExpire: 0.3
   IsHomming: 0
   IsRocket: 0
   RateOfRotation: 5
@@ -199,6 +213,7 @@ TrailRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -232,7 +247,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.39474106
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -240,7 +255,7 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6059568
+        time: 0.22375089
         value: 0
         inSlope: 0
         outSlope: 0

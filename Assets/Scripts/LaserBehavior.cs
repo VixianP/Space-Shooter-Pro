@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserBehavior : MonoBehaviour
+public class LaserBehavior : SpawnManager
 {   
     [SerializeField]
     private float speed;
-    [SerializeField]
-    private int AttackPower;
+    public int AttackPower;
     [SerializeField]
     private float TimeToExpire;
 
@@ -28,9 +27,12 @@ public class LaserBehavior : MonoBehaviour
     [SerializeField]
     private Vector2 RocketExplosionSize = new Vector2(2, 2);
 
+    //call targeting via spawn manager so that every bullet is not running its own loop
+    //measure distance and check if targerted, break out of loop once done. this will make it so that it wont be running full loops over and over again.
 
     private void Awake()
     {
+        
         EnemyList = GameObject.FindGameObjectsWithTag("Enemy");
 
         if (EnemyList.Length > 0)
@@ -60,14 +62,13 @@ public class LaserBehavior : MonoBehaviour
     {
             if (collision.tag == "Enemy" && IsRocket == false)
             {
-            collision.SendMessage("EDamage",AttackPower);
                 Destroy(gameObject);
             } else if(collision.tag == "Enemy" && IsRocket == true)
-        {
+            {
             Collider2D[] EnemiesInRange = Physics2D.OverlapCapsuleAll(transform.position, RocketExplosionSize, CapsuleDirection2D.Horizontal, 0);
             for(int i = 0; i < EnemiesInRange.Length; i++)
             {
-                EnemiesInRange[i].SendMessage("EDamage", AttackPower);
+                //EnemiesInRange[i].SendMessage("EDamage", AttackPower);
             }
             Instantiate(RocketExplosion,transform.position,Quaternion.identity);
             Destroy(gameObject);
@@ -115,13 +116,8 @@ public class LaserBehavior : MonoBehaviour
     }
     IEnumerator RocketTimeDetonate()
     {
-       
         yield return new WaitForSeconds(1f);
         Collider2D[] EnemiesInRange = Physics2D.OverlapCapsuleAll(transform.position, RocketExplosionSize, CapsuleDirection2D.Horizontal, 0);
-        for (int i = 0; i < EnemiesInRange.Length; i++)
-        {
-            EnemiesInRange[i].SendMessage("EDamage", AttackPower);
-        }
         Instantiate(RocketExplosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

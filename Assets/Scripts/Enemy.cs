@@ -2,40 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField]
-    private float speed;
-    [SerializeField]
-     private int EnemyCollisionDamage = 1;
-    [SerializeField]
-    private int PointValue = 5;
-    [SerializeField]
-    float EnemyFireRate = 1;
-    [SerializeField]
-    float TrailRate;
-    [SerializeField]
-    private int EnemyHealth;
-    [SerializeField]
-    private int LaserSpeed;
-    [SerializeField]
-    private int LaserDamage;
 
-    Player player;
-    LaserBehavior ElaserSpecs;
+    public float speed;
 
-    Animator EnemyAnimator;
-    Collider2D EnemyCollider;
+    public int EnemyCollisionDamage = 1;
 
-    [SerializeField]
-    AudioClip[] EnemyAudioClips;
+    public int PointValue = 5;
 
-    [SerializeField]
-    private GameObject Elaser;
+    public float EnemyFireRate = 1;
 
-    private bool IsDead;
-    [SerializeField]
-    private bool IsMove;
+    public float TrailRate;
+    
+    public int EnemyHealth;
+    
+    public int LaserSpeed;
+    
+    public int LaserDamage;
+
+    private Player player;
+    private SpawnManager SM;
+    private LaserBehavior ElaserSpecs;
+
+    private Animator EnemyAnimator;
+    private Collider2D EnemyCollider;
+
+
+    public AudioClip[] EnemyAudioClips;
+
+
+    public GameObject Elaser;
+
+    public bool IsDead;
+    //private bool IsTargeted;
+
+    public int EnemySpawnID; //used to remove from the spawn manager list
     
     void Start()
     {
@@ -53,6 +56,7 @@ public class Enemy : MonoBehaviour
         EnemyAnimator = GetComponent<Animator>();
         EnemyCollider = GetComponent<Collider2D>();
         ElaserSpecs = Elaser.GetComponent<LaserBehavior>();
+        SM = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>() ;
         speed = Random.Range(1, 5);
         transform.position = new Vector3(Random.Range(-8.30f, 8.30f), 9, 0);
     }
@@ -64,11 +68,13 @@ public class Enemy : MonoBehaviour
         Eboundaries();
         EnemyFire();
     }
-    void Emovement()
+    public void Emovement()
     {
-            transform.Translate(Vector3.up * speed * Time.deltaTime);
+
+        transform.Translate(0, -speed * Time.deltaTime, 0);
+
     }
-    void Eboundaries()
+    public void Eboundaries()
     {
         if(transform.position.y < -5.8)
         {
@@ -79,14 +85,23 @@ public class Enemy : MonoBehaviour
     {
         if(other.tag == "Player")
         {
+            if(player.IsInvul == false && player.IsDodging == false)
+            {
                 EnemyCollider.enabled = false;
                 speed = 1;
                 EnemyAnimator.SetTrigger("ED");
-                player.Damage(EnemyCollisionDamage,gameObject);
+                player.Damage(EnemyCollisionDamage);
+                EDamage(1);
+                Destroy(gameObject);
+            }
                 AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
         }
+        if(other.tag == "Laser")
+        {
+            EDamage(other.GetComponent<LaserBehavior>().AttackPower);
+        }
     }
-    void EnemyFire()
+    public void EnemyFire()
     {
         if (IsDead == false && transform.position.y > 0)
         {
@@ -98,7 +113,7 @@ public class Enemy : MonoBehaviour
                 }
         }
     }
-    public void EDamage(int Dmg)
+    public virtual void EDamage(int Dmg)
     {
         EnemyHealth -= Dmg;
         if (EnemyHealth < 1)
@@ -110,6 +125,7 @@ public class Enemy : MonoBehaviour
             AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
             IsDead = true;
             Destroy(gameObject,2);
+            SM.OnEnemyDeath(gameObject);
         }
     }
 }

@@ -22,11 +22,14 @@ public class EnemyLaser : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerScript = collision.GetComponent<Player>();
             if (collision.tag == "Player")
             {
-                PlayerScript.Damage(AttackPower,gameObject);
-                
+            PlayerScript = collision.GetComponent<Player>();
+            if (PlayerScript.IsInvul == false && PlayerScript.IsDodging == false)
+            {
+                PlayerScript.Damage(AttackPower);
+                Destroy(gameObject);
+            }
             }
         
         

@@ -230,8 +230,10 @@ MonoBehaviour:
   MaxSpeed: 10
   speed: 0
   ThrusterSpeedAnim: 0
+  InvulnTime: -1
   DashCoolDown: 0
   IsInvul: 0
+  IsDodging: 0
   Projectiles:
   - {fileID: 2747728255292702028, guid: 365f5198b8f842b4898b1b27873c1d36, type: 3}
   - {fileID: 1305977801254190013, guid: 30005e81f58af744aab7ac9e11abaaf3, type: 3}
@@ -240,7 +242,7 @@ MonoBehaviour:
   SkillCD:
   - -1
   Ammo1: 15
-  FireRate: 0.1
+  FireRate: 0.2
   ShotID: 0
   Shield: {fileID: 8651066944733916587}
   BulletOffSet: 1
@@ -255,7 +257,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   Thruster: {fileID: 6780174870968404953}
   AssistGameObject: []
-  PAGameObject: {fileID: 0}
 --- !u!70 &2623461148158734144
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

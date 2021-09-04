@@ -22,13 +22,13 @@ public class Player : MonoBehaviour
     private float ThrusterSpeedAnim;
     private bool CanBoost = true;
     private bool IsBoosting;
-    private float InvulnTime = -1;
+    public float InvulnTime = -1;
     private float DashTime = -1; //dash input timer
     [SerializeField]
     private float DashCoolDown; //variable to control input cooldown
     [SerializeField]
     public bool IsInvul = false;
-    private bool IsDodging;
+    public bool IsDodging;
     #endregion
     #region Projectile Properties
     /*[Summary]
@@ -125,10 +125,10 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     Animator Thruster;
+
     #region Player Assist
     [SerializeField]
     private List<GameObject> AssistGameObject = new List<GameObject>();
-    private GameObject TempTarget;
     Player_Assist PARetarget;
     private List<GameObject> ListOfAssist = new List<GameObject>();
     private int AssistCount;
@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
         PlayerAudio.clip = PlayerFX[0];
 
         Ammoref1 = Ammo1;
-        
+
     }
     void Update()
     {
@@ -193,8 +193,6 @@ public class Player : MonoBehaviour
                     Instantiate(Projectiles[0], new Vector3(transform.position.x, transform.position.y + BulletOffSet, transform.position.z), Quaternion.identity);
                     PlayerAudio.Play();
                     PlayerAudio.volume = 4;
-
-
                     break;
                 case 1:
                     if (ShotID == 1 && Time.time < TriplerShotTime)
@@ -254,7 +252,7 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(11, transform.position.y, 0);
         }
     }
-   public void Damage(int dmg,GameObject obj)
+   public void Damage(int dmg)
     {
         
         if (ShieldHealth > 1)
@@ -266,28 +264,10 @@ public class Player : MonoBehaviour
         {
             Shield.SetActive(false);
         }
-        if(obj.tag == "Enemy")
-        {
-            PlayerHealth -= dmg;
-            PUI.UpdateLives(PlayerHealth);
-            Destroy(obj);
-            switch (PlayerHealth)
-            {
-                case 2:
-                    LeftEngine.SetActive(true);
-                    Main.GetComponent<Animator>().SetTrigger("Shake");
-                    break;
-                case 1:
-                    Main.GetComponent<Animator>().SetTrigger("Shake");
-                    RightEngine.SetActive(true);
-                    break;
-            }
-        }
         if(IsInvul == false && IsDodging == false)
         {
             PlayerHealth -= dmg;
             PUI.UpdateLives(PlayerHealth);
-            Destroy(obj);
             switch (PlayerHealth)
             {
                 case 2:
@@ -492,7 +472,7 @@ public class Player : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
                 speed += boostnum;
                 PUI.UpdateBoostUI(speed * 0.001f,2);
-                Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim += speed * .10f);
+                Thruster.SetFloat("BFloatTrigger", ThrusterSpeedAnim += speed * .10f); //replace speed with a slider
                 if (ThrusterSpeedAnim > 1)
                 {  
                     ThrusterSpeedAnim = 1;
@@ -547,8 +527,7 @@ public class Player : MonoBehaviour
         }
         else if (AssistCount > 0)
         {
-            TempTarget = ListOfAssist[AssistCount - 1];
-            PARetarget.Retarget(TempTarget);
+            PARetarget.Retarget(ListOfAssist[AssistCount - 1]);
         }
     }
 

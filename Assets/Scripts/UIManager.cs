@@ -73,7 +73,7 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateBoostUI(float boost,int MinMax)//used to round off values
     {
-        BoostSlider.value += boost;
+        BoostSlider.value *= boost;
         if(MinMax == 1)
         {
             BoostSlider.value = 1;

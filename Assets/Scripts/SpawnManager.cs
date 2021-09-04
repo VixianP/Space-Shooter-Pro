@@ -4,41 +4,63 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    //enemy specs
     [SerializeField]
     private float EnemySpawnTime = 5f;
     [SerializeField]
-    private GameObject Enemy;
+    private GameObject[] Enemy;
     [SerializeField]
     private GameObject EnemyContainer;
- 
+    [SerializeField]
+    private int MaxEnemies;
+    private int Randomizer = 0;
+    [SerializeField]
+    private List<GameObject> EnemiesOnScreen = new List<GameObject>();
+
+    //Timers
+    [SerializeField]
+    private float TimeInBettweenWavesTimer;
+    private bool AllDead;
+
+    //Wave Control
+    [SerializeField]
+    private int EnemyCount; //waves dont start until ALL enemies have been spawned
+    [SerializeField]
+    private int MaxWave;
+    [SerializeField] //remove serialization when done
+    private int WaveCount;
+
+    //power up specs
     [SerializeField]
     private GameObject[] PowerUp;
     private int PowerUpSelection;
     [SerializeField]
     float Tier1PowerUpTimer = 10;
 
+
+    //Other Scripts
     [SerializeField]
     GameObject UIManagerGameObject;
     [SerializeField]
     GameObject SceneLoaderGameObject;
-    
-    
-    private bool IsPlayerDead = false;
     UIManager UIM;
     SceneLoader SL;
+    Enemy EnemyScript;
 
-    //enemy count
+    //player specs
+    private bool IsPlayerDead = false;
+
     private void Awake()
     {
         SL = SceneLoaderGameObject.GetComponent<SceneLoader>();
         UIM = UIManagerGameObject.GetComponent<UIManager>();
-       
-        
+        EnemyCount = MaxEnemies;
     }
 
     private void Update()
     {
         GameOverInput();
+        WaveControl();
     }
 
     IEnumerator PowerUpCoroutine()
@@ -64,15 +86,47 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(PowerUpCoroutine());
     }
    
-    IEnumerator EnemyCoroutine(float time)
+    IEnumerator EnemyCoroutine(float time) //pass another parameter for randomness in Enemy Array
     {
         yield return new WaitForSeconds(1.5f);
-        while (IsPlayerDead == false)
+        WaveCount++;
+        if (IsPlayerDead == false)
         {
-            GameObject NewEnemy = Instantiate(Enemy, new Vector3(Random.Range(-8.20f, 8.20f), 8f, 0), Quaternion.Euler(180, 0, 0));
-            NewEnemy.transform.parent = EnemyContainer.transform;
-            yield return new WaitForSeconds(time);
+            for (int i = 0; i < MaxEnemies; i++)
+            {
+                GameObject NewEnemy = Instantiate(Enemy[Random.Range(0,Randomizer)], new Vector3(Random.Range(-4.20f, 4.20f), 10f, 0), Quaternion.identity);
+                EnemyScript = NewEnemy.GetComponent<Enemy>();
+                NewEnemy.transform.parent = EnemyContainer.transform;
+                EnemiesOnScreen.Add(NewEnemy);
+                EnemyCount--; 
+                yield return new WaitForSeconds(time);
+            }
         }
+    }
+    public void OnEnemyDeath(GameObject enemy) 
+    {
+        int PositionInList = EnemiesOnScreen.IndexOf(enemy);
+        EnemiesOnScreen.Remove(EnemiesOnScreen[PositionInList]);
+    }
+    void WaveControl()
+    {
+        if (WaveCount < MaxWave)
+        {
+            if (EnemiesOnScreen.Count < 1 && EnemyCount < 1)
+            {
+                MaxEnemies += 2;
+                EnemyCount = MaxEnemies;
+                StartCoroutine(TimeInBettweenWaves());
+                //intiate pause and wave transition animation
+            }
+        }
+    }
+    IEnumerator TimeInBettweenWaves()
+    {
+        yield return new WaitForSeconds(TimeInBettweenWavesTimer);
+        EnemyCount = MaxEnemies;
+        Randomizer = Enemy.Length;
+        StartCoroutine(EnemyCoroutine(2));
     }
     public void OnPlayerDeath()
     {
