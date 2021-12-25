@@ -24,11 +24,12 @@ public class SpawnManager : MonoBehaviour
 
     //Wave Control
     [SerializeField]
-    private int EnemyCount; //waves dont start until ALL enemies have been spawned
+    private int EnemyCount;
+    private int AmountOfEnemiesCurrentlySpawned;
     [SerializeField]
-    private int MaxWave;
-    [SerializeField] //remove serialization when done
-    private int WaveCount;
+    private int MaxWave; //the max waves in a game
+    [SerializeField] 
+    private int CurrentWave; //the current wave
 
     //power up specs
     [SerializeField]
@@ -60,7 +61,7 @@ public class SpawnManager : MonoBehaviour
     private void Update()
     {
         GameOverInput();
-        WaveControl();
+       //WaveControl();
     }
 
     IEnumerator PowerUpCoroutine()
@@ -83,13 +84,12 @@ public class SpawnManager : MonoBehaviour
     public void StartSpawning()
     {
         StartCoroutine(EnemyCoroutine(EnemySpawnTime));
-        StartCoroutine(PowerUpCoroutine());
+       // StartCoroutine(PowerUpCoroutine());
     }
    
     IEnumerator EnemyCoroutine(float time) //pass another parameter for randomness in Enemy Array
     {
         yield return new WaitForSeconds(1.5f);
-        WaveCount++;
         if (IsPlayerDead == false)
         {
             for (int i = 0; i < MaxEnemies; i++)
@@ -98,27 +98,31 @@ public class SpawnManager : MonoBehaviour
                 EnemyScript = NewEnemy.GetComponent<Enemy>();
                 NewEnemy.transform.parent = EnemyContainer.transform;
                 EnemiesOnScreen.Add(NewEnemy);
-                EnemyCount--; 
+                AmountOfEnemiesCurrentlySpawned++;
                 yield return new WaitForSeconds(time);
             }
         }
     }
-    public void OnEnemyDeath(GameObject enemy) 
+    public void WaveControl()
     {
-        int PositionInList = EnemiesOnScreen.IndexOf(enemy);
-        EnemiesOnScreen.Remove(EnemiesOnScreen[PositionInList]);
-    }
-    void WaveControl()
-    {
-        if (WaveCount < MaxWave)
+        EnemyCount--;
+        if (CurrentWave < MaxWave)
         {
-            if (EnemiesOnScreen.Count < 1 && EnemyCount < 1)
+            if (AmountOfEnemiesCurrentlySpawned >= MaxEnemies)
             {
-                MaxEnemies += 2;
-                EnemyCount = MaxEnemies;
-                StartCoroutine(TimeInBettweenWaves());
-                //intiate pause and wave transition animation
+                if (EnemyCount < 1)
+                {
+                    CurrentWave++;
+                    MaxEnemies += 2;
+                    EnemyCount = MaxEnemies;
+                    EnemiesOnScreen.Clear();
+                    StartCoroutine(TimeInBettweenWaves());
+                    //intiate pause and wave transition animation
+                }
             }
+        } else
+        {
+            //call boss
         }
     }
     IEnumerator TimeInBettweenWaves()

@@ -7,18 +7,31 @@ public class PowerUp : MonoBehaviour
 
     [SerializeField]
     private float speed = 3;
-    /*
-     * 
-     */
+
     [SerializeField]
     private int PowerUpID;
 
+    private bool IsFollowing;
+    [SerializeField]
+    GameObject ObjectToFollow;
+
     [SerializeField]
     private AudioClip PowerUpAudio;
-    // Update is called once per frame
+
+    TrailingEnemies TE;
+    EnemyTrailHandler TH;
+    Enemy EnemyScript;
+
     void Update()
     {
-        transform.Translate(Vector3.down * speed * Time.deltaTime);
+        if(ObjectToFollow == null)
+        {
+            transform.Translate(Vector3.down * speed * Time.deltaTime);
+        } else if(ObjectToFollow != null && IsFollowing == true)
+        {
+            MoveTowards();
+        }
+
         Boundaries();
     }
     void Boundaries()
@@ -28,7 +41,28 @@ public class PowerUp : MonoBehaviour
             Destroy(gameObject);
         }
     }
-  
+    public void MoveTowards()
+    {
+        TE = ObjectToFollow.GetComponent<TrailingEnemies>();
+        if (Vector2.Distance(gameObject.transform.position,ObjectToFollow.transform.position) < 1)
+            {
+            TE.AddCargo(gameObject);
+            transform.parent = TE.gameObject.transform;
+            gameObject.SetActive(false);
+        } else if(Vector2.Distance(gameObject.transform.position,ObjectToFollow.transform.position) > 0)
+            {
+            transform.position = Vector2.Lerp(transform.position, ObjectToFollow.transform.position, speed * 2f * Time.deltaTime);
+        }
+        
+    }
+    public void SetObject(GameObject Object)
+    {
+        if (IsFollowing == false)
+        {
+            ObjectToFollow = Object;
+            IsFollowing = true;
+        }
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player")
@@ -61,8 +95,13 @@ public class PowerUp : MonoBehaviour
             AudioSource.PlayClipAtPoint(PowerUpAudio, transform.position);
             Destroy(gameObject);
         }
-       
+        if(other.tag == "Enemy")
+        {
+            if(other.gameObject.GetComponent<Enemy>() != null)
+            {
+                EnemyScript = other.gameObject.GetComponent<Enemy>();
+            }
+        }
     }
-
 
 }

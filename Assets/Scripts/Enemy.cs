@@ -9,18 +9,17 @@ public class Enemy : MonoBehaviour
     public float speed;
 
     public int EnemyCollisionDamage = 1;
-
     public int PointValue = 5;
-
     public float EnemyFireRate = 1;
-
     public float TrailRate;
-    
     public int EnemyHealth;
-    
     public int LaserSpeed;
-    
     public int LaserDamage;
+
+    [SerializeField]
+    private bool IsFollowing;
+    [SerializeField]
+    private bool CanFire;
 
     private Player player;
     private SpawnManager SM;
@@ -66,12 +65,30 @@ public class Enemy : MonoBehaviour
     {
         Emovement();
         Eboundaries();
-        EnemyFire();
+        if (CanFire == true)
+        {
+            EnemyFire();
+        }
     }
     public void Emovement()
     {
-
-        transform.Translate(0, -speed * Time.deltaTime, 0);
+        if (IsFollowing == false)
+        {
+            transform.Translate(0, -speed * Time.deltaTime, 0);
+        } else
+        {
+            if (Vector2.Distance(transform.position, player.transform.position) > 1.2f)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 0.005f);
+            }
+            if (Vector2.Distance(transform.position, player.transform.position) > 0.9f)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, player.transform.position, 0.005f);
+            } else
+            {
+                transform.Translate(0, -speed * Time.deltaTime, 0);
+            }
+        } 
 
     }
     public void Eboundaries()
@@ -125,7 +142,7 @@ public class Enemy : MonoBehaviour
             AudioSource.PlayClipAtPoint(EnemyAudioClips[1], transform.position);
             IsDead = true;
             Destroy(gameObject,2);
-            SM.OnEnemyDeath(gameObject);
+            SM.WaveControl();
         }
     }
 }

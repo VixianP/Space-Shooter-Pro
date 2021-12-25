@@ -89,7 +89,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2747728255292702028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5883, y: -0.4504, z: 0}
+  m_LocalPosition: {x: -2.24, y: -0.54, z: 0}
   m_LocalScale: {x: 0.30835086, y: 0.17668514, z: 1.1711566}
   m_Children:
   - {fileID: 8078225675321716671}
@@ -167,7 +167,7 @@ MonoBehaviour:
   TimeInBettweenWavesTimer: 0
   EnemyCount: 0
   MaxWave: 0
-  WaveCount: 0
+  CurrentWave: 0
   PowerUp: []
   Tier1PowerUpTimer: 10
   UIManagerGameObject: {fileID: 0}
@@ -268,7 +268,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0, g: 0.9150943, b: 0.018072784, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}

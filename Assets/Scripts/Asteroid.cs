@@ -9,6 +9,10 @@ public class Asteroid : MonoBehaviour
     private float RotSpeed;
     [SerializeField]
     private GameObject Explosion;
+    [SerializeField]
+    private GameObject FxManagerObject;
+
+    Fx FxManage;
 
     Collider2D AsteroidCollider;
 
@@ -16,6 +20,10 @@ public class Asteroid : MonoBehaviour
 
     private void Start()
     {
+        if(FxManagerObject != null)
+        {
+            FxManage = FxManagerObject.GetComponent<Fx>();
+        }
         AsteroidCollider = GetComponent<Collider2D>();
         _SpawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
     }
@@ -31,6 +39,7 @@ public class Asteroid : MonoBehaviour
             AsteroidCollider.enabled = false;
             _SpawnManager.StartSpawning();
             Instantiate(Explosion, transform.position, Quaternion.identity);
+            FxManage.StartTransitionFX();
             Destroy(gameObject);
         }
     }
